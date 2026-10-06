@@ -2,9 +2,9 @@
   "outputDirectory": "public",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/i/:slug", "destination": "/invite.html" },
-    { "source": "/dashboard/:slug", "destination": "/dashboard.html" },
-    { "source": "/checkin/:slug", "destination": "/checkin.html" },
+    { "source": "/i/:slug", "destination": "/invite" },
+    { "source": "/dashboard/:slug", "destination": "/dashboard" },
+    { "source": "/checkin/:slug", "destination": "/checkin" },
     { "source": "/api/:path*", "destination": "/api/router?path=:path*" }
   ],
   "headers": [
