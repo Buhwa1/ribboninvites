@@ -1,0 +1,51 @@
+:root{
+  --outer:#1E120C; --ink:#3A2318; --ink-soft:#7A5A48; --accent:#A8802F; --line:rgba(168,128,47,.5);
+  --hi:rgba(255,255,255,.7); --lo:rgba(60,30,15,.28);
+  --display:"Bodoni Moda",Didot,"Times New Roman",serif; --body:var(--display); --script:"Italianno","Snell Roundhand",cursive;
+  --name-size:min(16cqw,8.4cqh); --name-weight:400; --and-size:min(13cqw,6.8cqh); --couple-size:min(9cqw,4.8cqh);
+  --pill-bg:#FBF5EA; --pill-ink:#3A2318; --pill-border:1px solid rgba(168,128,47,.55); --pill-shadow:0 2px 6px rgba(60,30,15,.15);
+  --yes-bg:#6E3A20; --yes-ink:#FBF5EA;
+  --cart-fill:#FBF5EA; --cart-line:rgba(168,128,47,.75); --cart-dot:#E7CF8E;
+  --map-ring:#FBF5EA; --map-bg:#F1E6D3; --lake:#BFCBC0; --shore:#A9B8AC; --road:#FFFDF8; --pin:#8A3B22; --map-txt:#6E4E3C; --lake-txt:#5F7A6C;
+  --dots-top:13.2cqh; --ask-size:min(8.6cqw,4.6cqh);
+  --bark:#76401F;
+}
+.frame,.gate{background-color:var(--bark);background-image:url("__BARK_DARK__"),url("__BARK_LIGHT__"),radial-gradient(110% 70% at 50% 40%,rgba(160,90,45,.35),rgba(30,12,5,.45))}
+.label{font-size:min(2.8cqw,1.5cqh)}
+.lede,.verse,.dress,.thanks,.textlink{font-size:min(4.6cqw,2.4cqh)}
+.body{font-size:min(4.7cqw,2.45cqh)}
+.timeline span{font-size:min(5.6cqw,3cqh)}
+.mono{display:none}
+.inside{opacity:0;transform:translateY(5cqh) scale(.94);transition:opacity .8s ease,transform 1.3s cubic-bezier(.2,.7,.2,1)}
+.open .inside{opacity:1;transform:none}
+.arch{background:#F6EEDF;border-radius:50% 50% 2cqw 2cqw / 17cqh 17cqh 2cqw 2cqw;box-shadow:0 1.6cqh 4cqh rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.25)}
+.arch::after{content:"";position:absolute;inset:2cqw;border-radius:inherit;border:1px solid var(--accent);box-shadow:inset 0 0 0 3px #F6EEDF,inset 0 0 0 4px rgba(168,128,47,.5)}
+.arch::before{content:"";position:absolute;left:9cqw;right:9cqw;bottom:4.6cqw;height:2.2cqw;background:url("__ZIGZAG__") repeat-x center/auto 100%;opacity:.85}
+.brooch{position:absolute;left:50%;top:6.5cqh;width:min(14cqw,7.5cqh);aspect-ratio:1;transform:translate(-50%,-50%);z-index:2;filter:drop-shadow(0 2px 3px rgba(60,30,15,.4))}
+.gate{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqh;transition:opacity .7s ease 2s;color:#F1E2C4}
+.gate.opening{opacity:0}
+.g-top{text-align:center}
+.g-kicker{font-size:min(2.9cqw,1.6cqh);letter-spacing:.32em;text-indent:.32em;opacity:.8}
+.g-couple{font-family:var(--script);font-size:min(13cqw,7cqh);line-height:1.1;color:#EBD49A;margin-top:.6cqh}
+.g-tap{font-style:italic;font-size:min(4.2cqw,2.2cqh);opacity:.85;transition:opacity .4s}
+.opening .g-tap{opacity:0}
+.env{position:relative;width:80cqw;height:54cqw;perspective:300cqw;margin-top:12cqw}
+.env-back{position:absolute;inset:0;background:#E2D0B0;border-radius:1cqw;box-shadow:0 3cqw 7cqw rgba(0,0,0,.5)}
+.env-card{position:absolute;left:5cqw;right:5cqw;top:3cqw;height:46cqw;z-index:2;background:#FBF5EA;border-radius:.6cqw;box-shadow:inset 0 0 0 1.4cqw #FBF5EA,inset 0 0 0 1.6cqw var(--accent);display:flex;flex-direction:column;align-items:center;padding-top:5cqw;color:var(--ink)}
+.env-card b{font-family:var(--script);font-weight:400;font-size:11cqw;line-height:1;color:#6E3A20}
+.env-card small{font-size:3cqw;letter-spacing:.25em;margin-top:1.5cqw;color:var(--ink-soft)}
+.env-front{position:absolute;inset:0;z-index:3;border-radius:1cqw;background:linear-gradient(160deg,#F3E7D0,#E3D1B0);clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%)}
+.env-to{position:absolute;left:0;right:0;bottom:2cqw;text-align:center;color:#5A3420}
+.env-to small{display:block;font-style:italic;font-size:3.4cqw;opacity:.8}
+.env-to span{display:block;font-family:var(--script);font-size:7.6cqw;line-height:1;padding:0 7cqw}
+.env-flap{position:absolute;left:0;right:0;top:0;height:30cqw;z-index:4;background:linear-gradient(180deg,#DAC6A2,#CBB38A);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top center}
+.seal{position:absolute;left:50%;top:24.5cqw;width:16cqw;aspect-ratio:1;margin:-8cqw 0 0 -8cqw;z-index:5;border:0;padding:0;background:none;cursor:pointer}
+.seal svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 .8cqw 1.2cqw rgba(40,20,8,.5))}
+.seal .ring{animation:breathe 3s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes breathe{0%,100%{opacity:0;transform:scale(1)}50%{opacity:.6;transform:scale(1.12)}}
+.opening .seal{animation:sealOut .45s ease-in forwards}
+@keyframes sealOut{to{transform:scale(.5) translateY(6cqw);opacity:0}}
+.opening .env-flap{animation:flap .9s ease-in-out .3s forwards}
+@keyframes flap{0%{transform:rotateX(0);z-index:4}49%{z-index:4}50%{z-index:1}100%{transform:rotateX(180deg);z-index:1}}
+.opening .env-card{animation:rise 1s cubic-bezier(.3,.7,.2,1) 1.05s forwards}
+@keyframes rise{to{transform:translateY(-27cqw)}}

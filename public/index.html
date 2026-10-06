@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RibbonInvites · Digital wedding invitations that open like a gift</title>
+<meta name="description" content="Elegant digital invitations for weddings and introductions. A personal link for every guest, RSVPs with headcounts, QR entry passes and gate check-in, sent on WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RibbonInvites">
+<meta property="og:title" content="RibbonInvites · Invitations that open like a gift">
+<meta property="og:description" content="A personal invitation for every guest, real RSVPs, entry passes and gate check-in. Sent on WhatsApp.">
+<meta property="og:image" content="https://ribboninvites.com/img/og-site.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#4A1C2F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/img/app-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<style>
+/* hero */
+.hero{position:relative;padding:44px 0 72px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto auto;width:720px;height:720px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--gold-3) 28%,transparent),transparent);pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.08fr .92fr;gap:56px;align-items:center}
+.hero .display{margin:20px 0 22px}
+.hero .lede{max-width:33em}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.trust{display:flex;gap:10px 22px;flex-wrap:wrap;margin-top:28px;color:var(--muted);font-size:.9rem}
+.trust span{display:inline-flex;align-items:center;gap:8px}
+.trust .i{color:var(--ok);width:17px;height:17px}
+.demo{display:grid;justify-items:center;gap:16px}
+.seg{display:inline-flex;gap:2px;padding:4px;border-radius:999px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow-xs);max-width:100%;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{display:inline-flex;align-items:center;gap:7px;font:600 .82rem/1 var(--ui);padding:9px 12px;border-radius:999px;border:0;background:none;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.seg button i{width:11px;height:11px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.demo .note{display:inline-flex;align-items:center;gap:8px;font-size:.84rem;color:var(--muted)}
+@media (max-width:940px){.hero .wrap{grid-template-columns:1fr;gap:40px}.hero{padding-top:24px}}
+
+/* strip */
+.strip{border-block:1px solid var(--line);background:var(--surface)}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.strip div{padding:22px 18px;display:flex;gap:12px;align-items:center;font-size:.92rem;color:var(--ink-2)}
+.strip div+div{border-left:1px solid var(--line)}
+.strip .i{color:var(--gold-2);width:22px;height:22px}
+.strip b{display:block;font-weight:600}
+.strip span{color:var(--muted);font-size:.84rem}
+@media (max-width:860px){.strip .wrap{grid-template-columns:1fr 1fr}.strip div:nth-child(3){border-left:0}.strip div:nth-child(n+3){border-top:1px solid var(--line)}}
+@media (max-width:520px){.strip .wrap{grid-template-columns:1fr}.strip div+div{border-left:0;border-top:1px solid var(--line)}.strip div{padding:16px 4px}}
+
+/* sections */
+section.block{padding:96px 0}
+section.alt{background:var(--bg-2)}
+.sec-head{display:grid;gap:14px;max-width:720px;margin-bottom:48px}
+.sec-head.center{margin-inline:auto;text-align:center;justify-items:center}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
+.step{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px}
+.step .n{counter-increment:s;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--ribbon-soft);color:var(--ribbon);font:500 1.15rem/1 var(--display);margin-bottom:20px}
+.step .n::before{content:counter(s)}
+.step h3{font-size:1.3rem;margin-bottom:8px}
+.step p{color:var(--muted);font-size:.95rem}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+
+/* features bento */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;display:flex;flex-direction:column;gap:10px;transition:transform .2s,box-shadow .2s}
+.tile:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.tile .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--gold-soft);color:var(--gold-2);margin-bottom:6px}
+.tile h3{font-family:var(--ui);font-weight:650;font-size:1.04rem;letter-spacing:0}
+.tile p{color:var(--muted);font-size:.94rem}
+.tile.w3{grid-column:span 3}.tile.w2{grid-column:span 2}
+.tile.feature{background:var(--ribbon-2);border-color:var(--ribbon-2);color:#F7EEE4}
+.tile.feature .ic{background:rgba(227,192,138,.16);color:var(--gold-3)}
+.tile.feature p{color:rgba(247,238,228,.75)}
+.mini-dash{margin-top:auto;padding-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mini-dash div{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px}
+.mini-dash small{display:block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;opacity:.7}
+.mini-dash b{font:400 1.7rem/1.1 var(--display);color:#fff}
+@media (max-width:960px){.tile.w3,.tile.w2{grid-column:span 3}}
+@media (max-width:640px){.bento{grid-template-columns:1fr}.tile.w3,.tile.w2{grid-column:auto}}
+
+/* templates */
+.tgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.tcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.tprev{position:relative;aspect-ratio:3/4;display:grid;place-items:center;border:0;padding:0;cursor:pointer;overflow:hidden}
+.tprev img{height:84%;width:auto;border-radius:12px;box-shadow:0 14px 30px rgba(0,0,0,.3);transition:transform .35s}
+.tcard:hover .tprev img{transform:scale(1.04)}
+.tprev .play{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:6px;font:600 .74rem/1 var(--ui);padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.92);color:#1E1619;box-shadow:var(--shadow-xs)}
+.tprev .play .i{width:12px;height:12px;fill:currentColor;stroke:none}
+.tb{padding:16px 16px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.tb h3{font-size:1.2rem}
+.tb p{font-size:.86rem;color:var(--muted);line-height:1.45}
+.tb .best{display:flex;gap:6px;align-items:flex-start;color:var(--ink-2);font-size:.82rem;margin-top:2px}
+.tb .best .i{width:14px;height:14px;margin-top:2px;color:var(--gold-2)}
+.tb .row{margin-top:auto;padding-top:12px;flex-wrap:nowrap;gap:6px}
+.tb .row .btn{flex:1;padding:0 8px}
+@media (max-width:1080px){.tgrid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:640px){.tgrid{grid-template-columns:1fr 1fr;gap:10px}.tb .row{flex-direction:column}.tb .row .btn{width:100%}}
+
+/* pricing */
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+.plan{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:28px 24px;display:flex;flex-direction:column;gap:4px}
+.plan.pop{border-color:var(--ribbon);box-shadow:0 0 0 1px var(--ribbon),var(--shadow-lg)}
+.plan .tag{position:absolute;top:-12px;left:24px;font:700 .7rem/1 var(--ui);letter-spacing:.08em;background:var(--ribbon);color:var(--ribbon-ink);padding:7px 11px;border-radius:999px}
+.plan h3{font-family:var(--ui);font-weight:700;font-size:1.05rem;letter-spacing:0}
+.plan .note{color:var(--muted);font-size:.88rem;min-height:2.9em}
+.plan .price{display:flex;align-items:baseline;gap:6px;margin-top:18px}
+.plan .price small{font:600 .82rem var(--ui);color:var(--muted)}
+.plan .price b{font:400 2.4rem/1 var(--display);letter-spacing:-.02em}
+.plan .guests{display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:600;font-size:.94rem}
+.plan .guests .i{color:var(--gold-2)}
+.plan .per{color:var(--muted);font-size:.82rem}
+.plan .btn{margin-top:22px}
+@media (max-width:1040px){.plans{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.plans{grid-template-columns:1fr}}
+.included{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px}
+.included h3{font-family:var(--ui);font-weight:700;font-size:1rem;letter-spacing:0;margin-bottom:16px}
+.included ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px 28px}
+.included li{display:flex;gap:10px;align-items:flex-start;color:var(--ink-2);font-size:.93rem}
+.included li .i{color:var(--ok);margin-top:3px;width:16px;height:16px}
+@media (max-width:860px){.included ul{grid-template-columns:1fr}}
+.price-foot{display:flex;gap:10px 28px;flex-wrap:wrap;margin-top:18px;color:var(--muted);font-size:.9rem}
+.price-foot span{display:inline-flex;gap:8px;align-items:center}
+.price-foot .i{color:var(--gold-2)}
+
+.footer a.brand{display:inline-flex}
+/* faq */
+.faq{display:grid;gap:10px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:0 22px;transition:box-shadow .2s}
+.faq details[open]{box-shadow:var(--shadow)}
+.faq summary{font-weight:600;font-size:1.02rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .i{color:var(--muted);transition:transform .2s}
+.faq details[open] summary .i{transform:rotate(45deg)}
+.faq details p{color:var(--muted);padding:0 0 22px;max-width:62ch}
+.faq-wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
+@media (max-width:860px){.faq-wrap{grid-template-columns:1fr;gap:28px}}
+
+/* cta */
+.cta{position:relative;overflow:hidden;background:radial-gradient(120% 140% at 0% 0%,#6B2943,#3D1426 60%,#2A0D19);color:#F7EEE4;border-radius:var(--r-xl);padding:64px 40px;text-align:center;display:grid;gap:18px;justify-items:center}
+.cta::after{content:"";position:absolute;inset:16px;border:1px solid rgba(227,192,138,.28);border-radius:calc(var(--r-xl) - 10px);pointer-events:none}
+.cta img{width:84px;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35))}
+.cta .h2 em{color:var(--gold-3)}
+.cta p{color:rgba(247,238,228,.78);max-width:34em}
+.cta .btn{position:relative;z-index:1}
+.cta .btn.ghost{color:#F7EEE4}
+.cta .btn.ghost:hover{background:rgba(255,255,255,.08)}
+
+/* template preview modal */
+.pv-modal .card{max-width:440px;display:grid;justify-items:center;gap:14px;padding:22px 22px 24px}
+.pv-modal .phone{height:min(640px,72vh)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" aria-label="RibbonInvites home"><img src="/favicon.svg" alt=""><span class="wm" data-wordmark>RibbonInvites</span></a>
+  <nav class="nav" aria-label="Main">
+    <a href="#how">How it works</a><a href="#features">Features</a><a href="#templates">Designs</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn ghost sm hide-sm" id="mine" type="button" hidden>My invitations</button>
+  <a class="btn primary sm" href="/create">Create invitation</a>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <div>
+    <span class="eyebrow">Digital invitations for weddings &amp; introductions</span>
+    <h1 class="display">Invitations that open <em>like a gift.</em></h1>
+    <p class="lede">Give every guest a beautifully designed invitation addressed to them by name. They open it with a tap, reply in seconds and receive an entry pass for the gate. You follow every reply as it arrives.</p>
+    <div class="ctas">
+      <a class="btn primary lg" href="/create">Design yours free <svg class="i"><use href="/img/icons.svg#arrow-right"/></svg></a>
+      <a class="btn lg" href="#templates">Browse designs</a>
+    </div>
+    <div class="trust">
+      <span><svg class="i"><use href="/img/icons.svg#check-circle"/></svg>Nothing for guests to install</span>
+      <span><svg class="i"><use href="/img/icons.svg#check-circle"/></svg>Sent on WhatsApp</span>
+      <span><svg class="i"><use href="/img/icons.svg#check-circle"/></svg>Pay with Mobile Money</span>
+    </div>
+  </div>
+  <div class="demo">
+    <div class="phone"><iframe id="demoFrame" title="Live invitation demo" src="/i/demo-porcelain?embed=1"></iframe></div>
+    <div class="seg" id="seg" role="group" aria-label="Try a design"></div>
+    <p class="note"><svg class="i i-sm"><use href="/img/icons.svg#sparkle"/></svg>Live demo. Tap the seal to open it.</p>
+  </div>
+</div></section>
+
+<div class="strip"><div class="wrap">
+  <div><svg class="i"><use href="/img/icons.svg#palette"/></svg><p><b>5 signature designs</b><span>Each with its own reveal</span></p></div>
+  <div><svg class="i"><use href="/img/icons.svg#users"/></svg><p><b>Up to 500 guests</b><span>Each with a personal link</span></p></div>
+  <div><svg class="i"><use href="/img/icons.svg#edit"/></svg><p><b>Edit any time</b><span>Guests always see the latest</span></p></div>
+  <div><svg class="i"><use href="/img/icons.svg#shield"/></svg><p><b>Private by design</b><span>Your guest list stays yours</span></p></div>
+</div></div>
+
+<section class="block" id="how"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">How it works</span>
+    <h2 class="h2">From first draft to <em>first guest</em> in one evening.</h2>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="n"></div><h3>Design it, free</h3><p>Choose a design, add your names, date, venues and programme. Your invitation updates in a live preview as you type.</p></div>
+    <div class="step"><div class="n"></div><h3>Send personal links</h3><p>Paste your guest list and send each guest their own invitation on WhatsApp, straight from your dashboard.</p></div>
+    <div class="step"><div class="n"></div><h3>Track and welcome</h3><p>Watch replies arrive, nudge anyone who hasn't answered, and let your ushers check guests in at the gate.</p></div>
+  </div>
+</div></section>
+
+<section class="block alt" id="features"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Features</span>
+    <h2 class="h2">More than a beautiful card. <em>It runs your guest list.</em></h2>
+    <p class="lede">Everything between “you’re invited” and “thank you for coming”, in one link.</p>
+  </div>
+  <div class="bento">
+    <div class="tile w3 feature">
+      <div class="ic"><svg class="i i-lg"><use href="/img/icons.svg#chart"/></svg></div>
+      <h3>Know your numbers, live</h3>
+      <p>See who opened their invitation, who is coming and how many people they are bringing, so catering and seating are exact.</p>
+      <div class="mini-dash"><div><small>Opened</small><b>86</b></div><div><small>Attending</small><b>142</b></div><div><small>Awaiting</small><b>9</b></div></div>
+    </div>
+    <div class="tile w3">
+      <div class="ic"><svg class="i i-lg"><use href="/img/icons.svg#mail-open"/></svg></div>
+      <h3>Addressed to every guest by name</h3>
+      <p>Each guest receives a private link that opens with their name on it. It feels hand-addressed, even when you invite hundreds.</p>
+    </div>
+    <div class="tile w2">
+      <div class="ic"><svg class="i i-lg"><use href="/img/icons.svg#ticket"/></svg></div>
+      <h3>Entry passes and gate check-in</h3>
+      <p>Guests who accept receive a QR pass. Ushers scan it with any phone and see exactly who has arrived.</p>
+    </div>
+    <div class="tile w2">
+      <div class="ic"><svg class="i i-lg"><use href="/img/icons.svg#whatsapp"/></svg></div>
+      <h3>Sent and reminded on WhatsApp</h3>
+      <p>Invitations, gentle reminders, a day-before note and a thank-you, each written for you and sent in one tap.</p>
+    </div>
+    <div class="tile w2">
+      <div class="ic"><svg class="i i-lg"><use href="/img/icons.svg#music"/></svg></div>
+      <h3>Your song, your story</h3>
+      <p>Your chosen music plays softly as the invitation opens, with a page for your favourite photos together.</p>
+    </div>
+    <div class="tile w3">
+      <div class="ic"><svg class="i i-lg"><use href="/img/icons.svg#camera"/></svg></div>
+      <h3>A shared album after the day</h3>
+      <p>The same link becomes a photo album. Guests add the moments they captured, and you keep them all in one place.</p>
+    </div>
+    <div class="tile w3">
+      <div class="ic"><svg class="i i-lg"><use href="/img/icons.svg#globe"/></svg></div>
+      <h3>For weddings, introductions and more</h3>
+      <p>Wording adapts to weddings, introductions (kwanjula) and celebrations, or write your own in any language.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="block" id="templates"><div class="wrap">
+  <div class="sec-head">
+    <span class="eyebrow">Designs</span>
+    <h2 class="h2">Five designs, <em>five ways to reveal.</em></h2>
+    <p class="lede">From gatefold doors to velvet curtains, each design opens in its own way. Preview them live, then make one yours.</p>
+  </div>
+  <div class="tgrid" id="tgrid"></div>
+</div></section>
+
+<section class="block alt" id="pricing"><div class="wrap">
+  <div class="sec-head center">
+    <span class="eyebrow">Pricing</span>
+    <h2 class="h2">One payment per event. <em>Everything included.</em></h2>
+    <p class="lede">Design and test for free. Pay once with Mobile Money when you’re ready to send to everyone.</p>
+  </div>
+  <div class="plans" id="plans"></div>
+  <div class="included"><h3>Every plan includes</h3><ul id="included"></ul></div>
+  <div class="price-foot" id="priceFoot"></div>
+</div></section>
+
+<section class="block" id="faq"><div class="wrap faq-wrap">
+  <div class="sec-head" style="margin:0">
+    <span class="eyebrow">Questions</span>
+    <h2 class="h2">Good to know.</h2>
+    <p class="lede">Still wondering about something? <a id="faqWa" target="_blank" rel="noopener">Message us on WhatsApp</a> and we’ll reply quickly.</p>
+  </div>
+  <div class="faq">
+    <details><summary>Do my guests need to download anything?<svg class="i"><use href="/img/icons.svg#plus"/></svg></summary><p>No. Guests tap the link in WhatsApp and the invitation opens in their phone’s browser. It works on Android and iPhone, and on older phones too.</p></details>
+    <details><summary>Can I change details after sending?<svg class="i"><use href="/img/icons.svg#plus"/></svg></summary><p>Yes. Update the time, venue or programme whenever you need to. Every guest sees the latest version on the same link, so there’s nothing to resend.</p></details>
+    <details><summary>How do I test it before paying?<svg class="i"><use href="/img/icons.svg#plus"/></svg></summary><p>Every invitation starts in preview. You can add up to five guests, including yourself, open your personal links, reply and see the entry pass, exactly as your guests will.</p></details>
+    <details><summary>How do I pay?<svg class="i"><use href="/img/icons.svg#plus"/></svg></summary><p>Pay for your plan with MTN Mobile Money or Airtel Money, then tap “I’ve paid” in your dashboard. We activate your invitation, usually within the hour.</p></details>
+    <details><summary>What if a guest loses their link or pass?<svg class="i"><use href="/img/icons.svg#plus"/></svg></summary><p>Resend it from your dashboard in a tap. At the gate, ushers can also find any guest by name and check them in.</p></details>
+    <details><summary>Can we add our own music and photos?<svg class="i"><use href="/img/icons.svg#plus"/></svg></summary><p>Yes. Upload a song and up to twelve photos from your dashboard. Please use music you have the right to share, such as a royalty-free track.</p></details>
+    <details><summary>Is our guest list private?<svg class="i"><use href="/img/icons.svg#plus"/></svg></summary><p>Your guest list is only visible through your private dashboard link. We never share it or use it for anything else.</p></details>
+  </div>
+</div></section>
+
+<section class="block" style="padding-top:0"><div class="wrap">
+  <div class="cta">
+    <img src="/img/logo-mark.svg" alt="">
+    <h2 class="h2">Your guests deserve <em>a beautiful welcome.</em></h2>
+    <p>Design your invitation tonight. It’s free to create and preview, and you only pay when you’re ready to send.</p>
+    <div class="row" style="justify-content:center">
+      <a class="btn gold lg" href="/create">Create your invitation</a>
+      <a class="btn ghost lg" id="ctaWa" target="_blank" rel="noopener"><svg class="i"><use href="/img/icons.svg#whatsapp"/></svg>Talk to us</a>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer class="footer"><div class="wrap">
+  <div class="cols">
+    <div class="stack-sm">
+      <a class="brand" href="/" style="padding:0"><img src="/favicon.svg" alt=""><span class="wm" data-wordmark>RibbonInvites</span></a>
+      <p style="max-width:28em;margin-top:6px" data-tagline></p>
+    </div>
+    <div><h4>Product</h4><a href="#how">How it works</a><a href="#features">Features</a><a href="#templates">Designs</a><a href="#pricing">Pricing</a></div>
+    <div><h4>Get started</h4><a href="/create">Create an invitation</a><a href="#" id="footMine">My invitations</a><a href="#faq">FAQ</a></div>
+    <div><h4>Contact</h4><a id="footWa" target="_blank" rel="noopener">WhatsApp</a><a id="footMail"></a><a id="footIg" target="_blank" rel="noopener">Instagram</a></div>
+  </div>
+  <div class="base"><span>© <span data-year></span> <span data-brand>RibbonInvites</span>. Made with care in Kampala.</span></div>
+</div></footer>
+
+<script src="/js/brand.js"></script>
+<script src="/js/ui.js"></script>
+<script>
+(function () {
+  const { $, $$, esc, ugx, icon } = UI; const B = BRAND;
+  UI.header(); UI.brand();
+  $$('[data-tagline]').forEach(e => e.textContent = B.tagline + '. Digital invitations, RSVPs and gate check-in for weddings, introductions and celebrations.');
+  const hello = UI.wa(B.salesWhatsApp, `Hello ${B.name}! I'd like to know more about your digital invitations.`);
+  ['#faqWa', '#ctaWa', '#footWa'].forEach(s => $(s).href = hello);
+  $('#footMail').href = 'mailto:' + B.email; $('#footMail').textContent = B.email;
+  $('#footIg').href = 'https://instagram.com/' + B.instagram;
+
+  // hero demo switcher
+  const frame = $('#demoFrame'), seg = $('#seg');
+  function pick(id) { frame.src = `/i/demo-${id}?embed=1`; $$('button', seg).forEach(c => c.setAttribute('aria-pressed', c.dataset.t === id)); }
+  seg.innerHTML = B.templates.map((t, i) => `<button type="button" data-t="${t.id}" aria-pressed="${i === 0}"><i style="background:linear-gradient(135deg,${t.swatch[0]} 50%,${t.swatch[2]} 50%)"></i>${esc(t.name)}</button>`).join('');
+  $$('button', seg).forEach(b => b.onclick = () => pick(b.dataset.t));
+
+  // design gallery
+  $('#tgrid').innerHTML = B.templates.map(t => `
+    <article class="tcard">
+      <button class="tprev" type="button" data-try="${t.id}" aria-label="Preview the ${esc(t.name)} design" style="background:radial-gradient(120% 90% at 50% 25%,${t.swatch[1]},${t.swatch[0]})">
+        <img src="/img/tpl-${t.id}.jpg" alt="" loading="lazy">
+        <span class="play">${icon('play')}Preview</span>
+      </button>
+      <div class="tb">
+        <h3>${esc(t.name)}</h3>
+        <p>${esc(t.mood)}. ${esc(t.opening)}.</p>
+        <p class="best">${icon('heart')}<span>${esc(t.best)}</span></p>
+        <div class="row"><button class="btn sm" type="button" data-try="${t.id}">Preview</button><a class="btn sm primary" href="/create?template=${t.id}">Use design</a></div>
+      </div>
+    </article>`).join('');
+  $$('[data-try]').forEach(b => b.onclick = () => {
+    const t = B.templates.find(x => x.id === b.dataset.try);
+    const m = UI.modal(`<div class="phone"><iframe title="${esc(t.name)} preview" src="/i/demo-${t.id}?embed=1"></iframe></div>
+      <div class="row" style="justify-content:center"><b style="font-family:var(--display);font-size:1.25rem;font-weight:450">${esc(t.name)}</b><span class="muted small">${esc(t.opening)}</span></div>
+      <a class="btn primary block" href="/create?template=${t.id}">Use this design</a>`);
+    m.classList.add('pv-modal');
+  });
+
+  // pricing
+  $('#plans').innerHTML = B.plans.map(p => `
+    <div class="plan${p.popular ? ' pop' : ''}">${p.popular ? '<span class="tag">MOST POPULAR</span>' : ''}
+      <h3>${esc(p.name)}</h3><p class="note">${esc(p.note || '')}</p>
+      <div class="price"><small>UGX</small><b>${Number(p.price).toLocaleString('en-US')}</b></div>
+      <div class="guests">${icon('users')}Up to ${p.guests} guests</div>
+      <div class="per">About ${ugx(Math.round(p.price / p.guests / 100) * 100)} per guest</div>
+      <a class="btn ${p.popular ? 'primary' : ''} block" href="/create?plan=${p.id}">Choose ${esc(p.name)}</a>
+    </div>`).join('');
+  $('#included').innerHTML = ['All five designs and their reveals', 'A personal link for every guest', 'RSVPs with headcount and notes', 'Live dashboard with open tracking',
+    'WhatsApp invitations and reminders', 'QR entry passes and gate check-in', 'Your music and photo page', 'Shared photo album after the event', 'Unlimited edits until the day']
+    .map(x => `<li>${icon('check')}${esc(x)}</li>`).join('');
+  $('#priceFoot').innerHTML = `<span>${icon('users')}More than 500 guests? <a href="${hello}" target="_blank" rel="noopener">Ask for a custom quote</a></span>
+    <span>${icon('sparkles')}Prefer we set it up for you? Add ${ugx(B.setupFee)}</span>`;
+
+  // returning couples
+  let mine = []; try { mine = JSON.parse(localStorage.getItem('myInvites') || '[]'); } catch {}
+  function showMine(e) {
+    e && e.preventDefault();
+    UI.modal(`<h3 class="h3">My invitations</h3><p class="muted small" style="margin:6px 0 18px">Invitations created on this device. Lost a dashboard link? <a href="${hello}" target="_blank" rel="noopener">Message us</a> and we’ll help.</p>
+      <div class="stack-sm">${mine.length ? mine.map(m => `<a class="linkbox" style="text-decoration:none;padding:12px 14px" href="/dashboard/${encodeURIComponent(m.slug)}?k=${encodeURIComponent(m.k)}">
+        ${icon('ribbon')}<b style="flex:1">${esc(m.name)}</b><span class="faint small">${UI.ago(m.at)}</span>${icon('chevron-right')}</a>`).join('') : '<p class="empty">No invitations on this device yet.</p>'}</div>`);
+  }
+  if (mine.length) { $('#mine').hidden = false; $('#mine').onclick = showMine; }
+  $('#footMine').onclick = showMine;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dashboard · RibbonInvites</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#4A1C2F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<style>
+.dhead{padding:30px 0 6px;display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap}
+.dhead h1{font-size:clamp(2rem,4.4vw,2.8rem);font-weight:400;letter-spacing:-.025em}
+.dhead .meta{color:var(--muted);margin-top:10px;display:flex;gap:8px 14px;align-items:center;flex-wrap:wrap;font-size:.94rem}
+.dhead .meta span{display:inline-flex;align-items:center;gap:6px}
+.dhead .meta .i{width:16px;height:16px;color:var(--faint)}
+.dhead .acts{display:flex;gap:8px;flex-wrap:wrap}
+
+.activate{margin-top:22px;border-radius:var(--r-lg);overflow:hidden;border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);background:var(--gold-soft);display:grid;grid-template-columns:1.1fr .9fr}
+.activate .l{padding:24px 26px;display:grid;gap:12px;align-content:start}
+.activate h2{font-size:1.4rem;font-weight:450}
+.activate p{color:var(--ink-2);font-size:.93rem}
+.activate .r{padding:24px 26px;background:var(--surface);border-left:1px solid color-mix(in srgb,var(--gold) 25%,transparent);display:grid;gap:12px;align-content:start}
+.activate ol{margin:0;padding:0;list-style:none;counter-reset:a;display:grid;gap:10px}
+.activate li{counter-increment:a;display:flex;gap:10px;font-size:.92rem;color:var(--ink-2)}
+.activate li::before{content:counter(a);flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#22160A;font:700 .74rem/1 var(--ui);margin-top:1px}
+.paybox{display:grid;gap:4px;font-family:var(--mono);font-size:.84rem;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px}
+.paybox b{font-family:var(--ui);font-size:1.4rem;font-weight:500;letter-spacing:-.01em;color:var(--ink)}
+@media (max-width:860px){.activate{grid-template-columns:1fr}.activate .r{border-left:0;border-top:1px solid color-mix(in srgb,var(--gold) 25%,transparent)}}
+
+.tabs{position:sticky;top:var(--top-h);z-index:30;background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);margin-top:22px}
+.tabs .wrap{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs .wrap::-webkit-scrollbar{display:none}
+.tabs button{display:inline-flex;align-items:center;gap:8px;font:600 .9rem/1 var(--ui);padding:16px 14px 15px;border:0;background:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s}
+.tabs button .i{width:17px;height:17px}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ribbon)}
+.tabs .count{font-size:.72rem;background:var(--surface-3);color:var(--muted);padding:3px 7px;border-radius:999px}
+.panel{padding:26px 0 90px}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;display:grid;gap:4px}
+.stat small{display:flex;align-items:center;gap:7px;color:var(--muted);font-weight:600;font-size:.8rem}
+.stat small .i{width:15px;height:15px;color:var(--gold-2)}
+.stat b{font:400 2.3rem/1.05 var(--display);letter-spacing:-.02em}
+.stat span{font-size:.82rem;color:var(--muted)}
+@media (max-width:860px){.stats{grid-template-columns:1fr 1fr}}
+.two{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;margin-top:16px}
+@media (max-width:940px){.two{grid-template-columns:1fr}}
+
+.checklist{display:grid;gap:4px}
+.ck{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--line)}
+.ck:last-child{border-bottom:0}
+.ck .dot{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line-2);display:grid;place-items:center;color:transparent}
+.ck.done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.ck .dot .i{width:14px;height:14px;stroke-width:2.6}
+.ck b{display:block;font-weight:600;font-size:.95rem}
+.ck span{display:block;color:var(--muted);font-size:.84rem}
+.ck.done b{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line-2)}
+@media (max-width:560px){.ck{grid-template-columns:30px 1fr}.ck .btn{grid-column:2;justify-self:start}}
+
+.bar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--surface-3);margin:14px 0 12px;gap:2px}
+.bar i{display:block;height:100%}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:7px}.legend i{width:10px;height:10px;border-radius:3px}
+.legend b{color:var(--ink);font-weight:600}
+.feed{display:grid;margin-top:6px}
+.feed div{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.feed div:last-child{border-bottom:0}
+.feed .fi{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none}
+.feed .fi .i{width:15px;height:15px}
+.feed time{margin-left:auto;color:var(--faint);font-size:.8rem;white-space:nowrap;padding-left:8px}
+
+.addbox{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
+@media (max-width:760px){.addbox{grid-template-columns:1fr}}
+.format{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px;font-size:.84rem;color:var(--muted);display:grid;gap:4px}
+.format code{font-family:var(--mono);font-size:.8rem;color:var(--ink-2)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:22px 0 12px}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{font:600 .82rem/1 var(--ui);padding:9px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;display:inline-flex;gap:7px;align-items:center}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters em{font-style:normal;opacity:.65;font-weight:700}
+.search{position:relative}
+.search .i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--faint);width:16px;height:16px}
+.search .input{padding:9px 12px 9px 36px;width:220px}
+.glist{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.grow{display:grid;grid-template-columns:minmax(0,1.7fr) 64px 160px 120px 168px;gap:12px;align-items:center;padding:13px 18px;border-bottom:1px solid var(--line)}
+.grow:last-child{border-bottom:0}
+.grow.h{background:var(--surface-2);font:700 .72rem/1 var(--ui);color:var(--muted);letter-spacing:.08em;padding:12px 18px}
+.grow .nm{display:flex;gap:12px;align-items:center;min-width:0}
+.grow .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--ribbon-soft);color:var(--ribbon);font:600 .8rem/1 var(--ui);flex:none}
+.grow .nm div{min-width:0}
+.grow .nm b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grow .nm span{font-size:.8rem;color:var(--muted);display:flex;gap:6px;align-items:center}
+.grow .seats{color:var(--ink-2);font-weight:600}
+.grow .seen{font-size:.84rem;color:var(--muted);display:flex;gap:6px;align-items:center}
+.grow .seen .i{width:15px;height:15px}
+.grow .acts{display:flex;gap:6px;justify-content:flex-end}
+.grow .note{grid-column:1/-1;margin:-4px 0 0 46px;font-size:.84rem;color:var(--ink-2);background:var(--surface-2);border-radius:10px;padding:8px 12px;display:flex;gap:8px}
+.grow .note .i{color:var(--gold-2);width:15px;height:15px;margin-top:2px}
+@media (max-width:900px){.grow{grid-template-columns:minmax(0,1fr) auto;row-gap:10px}.grow.h{display:none}.grow .seats,.grow .seen{display:none}.grow .acts{grid-column:1/-1;justify-content:flex-start;padding-left:46px}.grow .note{margin-left:46px}}
+
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{display:inline-flex;align-items:center;gap:8px;font:600 .88rem/1 var(--ui);padding:11px 15px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ribbon);color:var(--ribbon-ink);border-color:var(--ribbon)}
+.seg .i{width:16px;height:16px}
+.msgprev{background:#E7DDD3;border-radius:var(--r);padding:16px;display:grid}
+.bubble{justify-self:end;max-width:92%;background:#DCF7C5;color:#1b1b1b;border-radius:12px 12px 2px 12px;padding:10px 12px;font-size:.9rem;line-height:1.45;box-shadow:0 1px 1px rgba(0,0,0,.08);white-space:pre-wrap;word-break:break-word}
+.queue{display:grid;gap:8px;margin-top:14px}
+.q{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px}
+.q .av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--ribbon-soft);color:var(--ribbon);font:600 .78rem/1 var(--ui);flex:none}
+.q.done{opacity:.6}
+.q .who{flex:1;min-width:0}
+.q .who b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.q .who span{color:var(--muted);font-size:.82rem}
+
+.music-now{display:flex;gap:14px;align-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px}
+.music-now .disc{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle,#2a2224 18%,#4A1C2F 20%,#2a1018 70%);display:grid;place-items:center;flex:none;color:var(--gold-3)}
+.music-now b{display:block;font-weight:600}
+.phgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:6px}
+.ph{position:relative;border-radius:var(--r-sm);overflow:hidden;background:var(--surface-2);aspect-ratio:4/5;border:1px solid var(--line)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph .first{position:absolute;left:8px;top:8px}
+.ph .ov{position:absolute;inset:auto 0 0 0;display:flex;gap:6px;justify-content:flex-end;align-items:center;padding:8px;background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.ph .ov button,.ph .ov a{width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,255,255,.94);color:#1E1619;display:grid;place-items:center;cursor:pointer;text-decoration:none}
+.ph .ov .i{width:15px;height:15px}
+.ph .by{position:absolute;left:10px;bottom:13px;color:#fff;font-size:.76rem;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.6);max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.upl{position:relative;overflow:hidden}
+.upl input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.dropzone{border:1.5px dashed var(--line-2);border-radius:var(--r);padding:28px;text-align:center;display:grid;justify-items:center;gap:8px;color:var(--muted);background:var(--surface-2)}
+.dropzone .i{width:28px;height:28px;color:var(--gold-2)}
+.qrbox{width:200px;height:200px;background:#fff;border-radius:var(--r);padding:10px;box-shadow:var(--shadow-xs);border:1px solid var(--line)}
+.qrbox svg{width:100%;height:100%;display:block}
+.fatal{padding:80px 20px;display:grid;justify-items:center;gap:12px;text-align:center}
+.fatal .i{width:40px;height:40px;color:var(--faint)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" aria-label="RibbonInvites home"><img src="/favicon.svg" alt=""><span class="wm" data-wordmark>RibbonInvites</span></a>
+  <span class="spacer"></span>
+  <a class="btn ghost sm hide-sm" id="helpBtn" target="_blank" rel="noopener"><svg class="i"><use href="/img/icons.svg#whatsapp"/></svg>Support</a>
+</div></header>
+
+<main id="app">
+  <div class="wrap">
+    <div class="dhead">
+      <div style="flex:1;min-width:260px">
+        <h1 id="evTitle"><span class="skeleton" style="display:inline-block;width:260px;height:44px"></span></h1>
+        <div class="meta" id="evMeta"></div>
+      </div>
+      <div class="acts">
+        <a class="btn sm" id="viewBtn" target="_blank" rel="noopener"><svg class="i"><use href="/img/icons.svg#eye"/></svg>Preview</a>
+        <a class="btn sm" id="editBtn"><svg class="i"><use href="/img/icons.svg#edit"/></svg>Edit details</a>
+      </div>
+    </div>
+    <div id="banner"></div>
+  </div>
+
+  <nav class="tabs" aria-label="Dashboard sections"><div class="wrap" role="tablist">
+    <button role="tab" data-tab="overview" aria-selected="true"><svg class="i"><use href="/img/icons.svg#home"/></svg>Overview</button>
+    <button role="tab" data-tab="guests" aria-selected="false"><svg class="i"><use href="/img/icons.svg#users"/></svg>Guests <span class="count" id="gCount">0</span></button>
+    <button role="tab" data-tab="send" aria-selected="false"><svg class="i"><use href="/img/icons.svg#send"/></svg>Send &amp; remind</button>
+    <button role="tab" data-tab="media" aria-selected="false"><svg class="i"><use href="/img/icons.svg#music"/></svg>Music &amp; photos</button>
+    <button role="tab" data-tab="gate" aria-selected="false"><svg class="i"><use href="/img/icons.svg#scan"/></svg>Gate check-in</button>
+    <button role="tab" data-tab="gallery" aria-selected="false"><svg class="i"><use href="/img/icons.svg#camera"/></svg>Guest album</button>
+  </div></nav>
+
+  <div class="wrap">
+    <!-- OVERVIEW -->
+    <section class="panel" data-panel="overview" role="tabpanel">
+      <div class="stats" id="stats"></div>
+      <div class="two">
+        <div class="stack">
+          <div class="card" id="startCard">
+            <div class="card-h"><div><h2>Get started</h2><p>Four steps to a full house.</p></div></div>
+            <div class="checklist" id="checklist"></div>
+          </div>
+          <div class="card">
+            <div class="card-h" style="margin-bottom:4px"><div><h2>Replies</h2><p id="replyLine"></p></div></div>
+            <div class="bar" id="bar"></div>
+            <div class="legend" id="legend"></div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card">
+            <div class="card-h" style="margin-bottom:6px"><div><h2>Latest activity</h2><p>Updates automatically.</p></div></div>
+            <div class="feed" id="feed"></div>
+          </div>
+          <div class="card stack">
+            <div class="card-h" style="margin:0"><div><h2>Your links</h2><p>Keep your dashboard link private.</p></div></div>
+            <div class="field"><span class="lbl">Preview link <span class="opt">For you, not counted as a guest</span></span><div class="linkbox"><code id="prevLink"></code><button class="btn sm" data-copy="prevLink">Copy</button></div></div>
+            <div class="field" id="genWrap"><span class="lbl">General link <span class="opt">For group chats</span></span><div class="linkbox"><code id="genLink"></code><button class="btn sm" data-copy="genLink">Copy</button></div></div>
+            <div class="field"><span class="lbl">Dashboard link <span class="opt">Private</span></span><div class="linkbox"><code id="dashLink"></code><button class="btn sm" data-copy="dashLink">Copy</button></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GUESTS -->
+    <section class="panel" data-panel="guests" role="tabpanel" hidden>
+      <div class="card">
+        <div class="card-h"><div><h2>Add guests</h2><p id="limitNote"></p></div></div>
+        <div class="addbox">
+          <textarea class="textarea" id="newGuests" aria-label="Guests to add, one per line" placeholder="Grace Nakato, 0772 123456&#10;Mr. & Mrs. Daniel Ssemanda, 0701 234567, 2&#10;Dr. Patrick Okello & Family, , 4"></textarea>
+          <div class="format" style="min-width:250px">
+            <b style="color:var(--ink);font-size:.86rem">One guest per line</b>
+            <span><code>Name, WhatsApp number, seats</code></span>
+            <span>Number and seats are optional. Seats is how many people the invitation covers.</span>
+          </div>
+        </div>
+        <div class="row" style="margin-top:14px"><button class="btn primary" id="addGuests"><svg class="i"><use href="/img/icons.svg#user-plus"/></svg>Add to guest list</button></div>
+      </div>
+      <div class="toolbar">
+        <div class="filters" id="filters"></div><span class="spacer"></span>
+        <label class="search"><svg class="i"><use href="/img/icons.svg#search"/></svg><input class="input" id="search" placeholder="Search guests" aria-label="Search guests"></label>
+        <button class="btn sm" id="exportCsv"><svg class="i"><use href="/img/icons.svg#download"/></svg>Export</button>
+      </div>
+      <div class="glist" id="glist"></div>
+    </section>
+
+    <!-- SEND -->
+    <section class="panel" data-panel="send" role="tabpanel" hidden>
+      <div class="two" style="margin-top:0">
+        <div class="card stack">
+          <div class="card-h" style="margin:0"><div><h2>Send on WhatsApp</h2><p>Choose a message, adjust the wording, then tap Send beside each guest. WhatsApp opens with everything filled in.</p></div></div>
+          <div class="seg" id="msgType">
+            <button data-m="invite" aria-pressed="true"><svg class="i"><use href="/img/icons.svg#mail"/></svg>Invitation</button>
+            <button data-m="reminder" aria-pressed="false"><svg class="i"><use href="/img/icons.svg#bell"/></svg>Reminder</button>
+            <button data-m="dayBefore" aria-pressed="false"><svg class="i"><use href="/img/icons.svg#calendar"/></svg>Day before</button>
+            <button data-m="thanks" aria-pressed="false"><svg class="i"><use href="/img/icons.svg#heart"/></svg>Thank you</button>
+          </div>
+          <div class="field"><textarea class="textarea" id="msgText" aria-label="Message wording"></textarea>
+            <p class="hint">Personalised for each guest: <code class="kbd">{name}</code> <code class="kbd">{couple}</code> <code class="kbd">{date}</code> <code class="kbd">{venue}</code> <code class="kbd">{rsvpBy}</code> <code class="kbd">{link}</code></p></div>
+          <div class="row"><button class="btn sm" id="saveMsg"><svg class="i"><use href="/img/icons.svg#check"/></svg>Save wording</button><button class="btn sm ghost" id="resetMsg">Restore default</button></div>
+        </div>
+        <div class="card stack">
+          <div class="card-h" style="margin:0"><div><h2>Preview</h2><p id="prevFor"></p></div></div>
+          <div class="msgprev"><div class="bubble" id="bubble"></div></div>
+        </div>
+      </div>
+      <div class="toolbar"><h3 class="h3" style="font-size:1.2rem" id="queueTitle"></h3><span class="spacer"></span><span class="muted small" id="queueCount"></span></div>
+      <div class="queue" id="queue"></div>
+    </section>
+
+    <!-- MEDIA -->
+    <section class="panel" data-panel="media" role="tabpanel" hidden>
+      <div class="two" style="margin-top:0">
+        <div class="card stack">
+          <div class="card-h" style="margin:0"><div><h2>Music</h2><p>Plays softly once a guest opens the invitation, with a button to pause.</p></div></div>
+          <div id="musicNow"></div>
+          <div class="row"><label class="btn primary upl" id="musicBtn"><svg class="i"><use href="/img/icons.svg#upload"/></svg><span>Upload a song</span><input type="file" id="musicFile" accept="audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,.mp3,.m4a"></label><button class="btn danger" id="musicDel" hidden><svg class="i"><use href="/img/icons.svg#trash"/></svg>Remove</button></div>
+          <p class="hint">MP3 or M4A, up to 4 MB. Please use music you have the right to share, such as a royalty-free track.</p>
+        </div>
+        <div class="card stack">
+          <div class="card-h" style="margin:0"><div><h2>How photos appear</h2><p>Your photos get their own “Our moments” page, shown as a gentle slideshow. The first photo shows first, and we resize every photo so it loads quickly on mobile data.</p></div></div>
+          <div><a class="btn sm" id="seePhotos" target="_blank" rel="noopener"><svg class="i"><use href="/img/icons.svg#external"/></svg>See it in the invitation</a></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-h"><div style="flex:1"><h2>Your photos</h2><p id="photoNote"></p></div><label class="btn primary sm upl"><svg class="i"><use href="/img/icons.svg#image"/></svg>Add photos<input type="file" id="photoFile" accept="image/*" multiple></label></div>
+        <div class="phgrid" id="photos"></div>
+      </div>
+    </section>
+
+    <!-- GATE -->
+    <section class="panel" data-panel="gate" role="tabpanel" hidden>
+      <div class="stats" id="gateStats"></div>
+      <div class="two">
+        <div class="card stack">
+          <div class="card-h" style="margin:0"><div><h2>Check guests in at the gate</h2><p>Send this link to your ushers. It opens a scanner that reads each guest’s entry pass, and they can also find guests by name. It cannot see or change anything else.</p></div></div>
+          <div class="linkbox"><code id="gateLink"></code><button class="btn sm" data-copy="gateLink">Copy</button></div>
+          <div class="row"><a class="btn wa" id="gateWa" target="_blank" rel="noopener"><svg class="i"><use href="/img/icons.svg#whatsapp"/></svg>Send to an usher</a><a class="btn" id="gateOpen" target="_blank" rel="noopener"><svg class="i"><use href="/img/icons.svg#scan"/></svg>Open check-in</a></div>
+          <div class="notice"><svg class="i"><use href="/img/icons.svg#info"/></svg><span>Tip: open the check-in page on the usher’s phone the day before, and allow camera access, so scanning is instant on the day.</span></div>
+        </div>
+        <div class="card" style="display:grid;justify-items:center;align-content:center;gap:12px;text-align:center"><div class="qrbox" id="gateQr"></div><p class="muted small">Ushers can scan this code to open check-in.</p></div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="panel" data-panel="gallery" role="tabpanel" hidden>
+      <div class="card">
+        <div class="card-h"><div style="flex:1"><h2>Guest album</h2><p>From the day of your event, guests can add their photos through their invitation. They appear here for you to keep.</p></div><button class="btn sm" id="galRefresh"><svg class="i"><use href="/img/icons.svg#refresh"/></svg>Refresh</button></div>
+        <div class="phgrid" id="gallery"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="/js/brand.js"></script>
+<script src="/vendor/qrcode.min.js"></script>
+<script src="/js/ui.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

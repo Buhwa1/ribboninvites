@@ -1,0 +1,47 @@
+:root{
+  --outer:#D8C4B8; --paper:#EFE3DB; --paper-2:#E8D9CF; --paper-hi:#F8F0EA;
+  --ink:#5A4038; --ink-soft:#8A6F64; --line:rgba(150,110,95,.38); --accent:#9C7A5B;
+  --hi:rgba(255,251,247,.95); --lo:rgba(112,74,60,.36);
+  --display:"Cormorant Garamond",Garamond,"Times New Roman",serif; --body:var(--display);
+  --script:"Pinyon Script","Snell Roundhand",cursive;
+  --pill-bg:#F8F0EA; --pill-ink:#5A4038; --pill-shadow:-1px -1px 0 var(--hi),1px 2px 4px var(--lo),inset 0 0 0 1px rgba(150,110,95,.18);
+  --yes-bg:#5A4038; --yes-ink:#F8F0EA;
+  --cart-fill:#F6EDE7; --cart-line:rgba(140,100,85,.4); --cart-dot:#FBF6F2;
+  --map-ring:#F8F0EA; --map-bg:#EADDD4; --lake:#C7D2CA; --shore:#B5C2B9; --road:#FBF6F2; --pin:#8E4B4B; --map-txt:#7C6258; --lake-txt:#6F857A;
+}
+.frame{background-color:var(--paper);background-image:radial-gradient(120% 80% at 50% 40%,rgba(255,255,255,.35),transparent 70%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .27 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mono{font-family:var(--script)}
+.emb{filter:drop-shadow(-.6px -.6px 0 var(--hi)) drop-shadow(.9px 1.3px .9px var(--lo))}
+.emb .p{fill:var(--paper-hi);stroke:rgba(140,100,85,.3);stroke-width:.35}
+.emb .l{fill:var(--paper-hi);stroke:rgba(140,100,85,.28);stroke-width:.3}
+.emb .v{fill:none;stroke:rgba(140,100,85,.25);stroke-width:.25}
+.emb .st{fill:none;stroke:var(--paper-hi);stroke-width:.9;stroke-linecap:round}
+.emb .c{fill:var(--paper-2);stroke:rgba(140,100,85,.3);stroke-width:.3}
+.emb .pearl{fill:#FBF6F2;stroke:rgba(140,100,85,.25);stroke-width:.2}
+.inside{transform:scale(.96);transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}
+.open .inside{transform:none}
+.corner{position:absolute;width:64cqw;max-width:330px;pointer-events:none}
+.corner.tl{top:-1cqh;left:-2cqw}
+.corner.br{bottom:-1cqh;right:-2cqw;transform:rotate(180deg)}
+.arch{box-shadow:inset 1px 1px 0 var(--hi),inset -1px -1px 0 var(--lo),1px 1px 0 var(--hi),-1px -1px 0 rgba(112,74,60,.22)}
+.arch::after{content:"";position:absolute;inset:2.2cqw;border-radius:inherit;border:1px solid var(--line);box-shadow:1px 1px 0 var(--hi)}
+.gate{perspective:1600px}
+.door{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;background-color:var(--paper);background-image:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,0) 60%);transition:transform 1.7s cubic-bezier(.55,.05,.25,1),box-shadow 1.7s;backface-visibility:hidden}
+.door.l{left:0;transform-origin:left center;box-shadow:inset -10px 0 14px -10px rgba(90,55,45,.35)}
+.door.r{right:0;transform-origin:right center;box-shadow:inset 10px 0 14px -10px rgba(90,55,45,.25)}
+.door::before{content:"";position:absolute;inset:3cqw 3.2cqw;border:1px solid var(--line);box-shadow:1px 1px 0 var(--hi),inset 1px 1px 0 var(--hi);pointer-events:none}
+.door.l::before{right:2cqw}.door.r::before{left:2cqw}
+.door svg{position:absolute;inset:0;width:100%;height:100%}
+.door.r svg{transform:scaleX(-1)}
+.opening .door.l{transform:rotateY(-108deg)}
+.opening .door.r{transform:rotateY(108deg)}
+.seal{position:absolute;left:50%;top:50%;width:min(22cqw,13cqh);aspect-ratio:78/100;transform:translate(-50%,-50%);border:0;padding:0;background:none;cursor:pointer;z-index:6;transition:transform .6s cubic-bezier(.3,1.4,.5,1),opacity .5s ease .25s}
+.seal svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 3px 5px rgba(90,55,45,.32))}
+.seal .ring{animation:breathe 3.2s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes breathe{0%,100%{opacity:0;transform:scale(1)}50%{opacity:.55;transform:scale(1.08)}}
+.opening .seal{transform:translate(-50%,-50%) scale(1.25);opacity:0}
+.gate-text{position:absolute;left:0;right:0;bottom:9cqh;text-align:center;z-index:6;pointer-events:none;transition:opacity .5s}
+.gate-text .for{font-size:min(3.4cqw,1.8cqh);letter-spacing:.3em;text-indent:.3em;color:var(--ink-soft)}
+.gate-text .who{display:inline-block;margin-top:1cqh;padding:1cqh 5cqw;font-family:var(--script);font-size:min(7cqw,3.7cqh);color:var(--ink);background:rgba(248,240,234,.88);border-radius:999px;box-shadow:-1px -1px 0 var(--hi),1px 2px 4px var(--lo)}
+.gate-text .tap{margin-top:1.6cqh;font-style:italic;font-size:min(4.4cqw,2.3cqh);color:var(--ink-soft)}
+.opening .gate-text{opacity:0}

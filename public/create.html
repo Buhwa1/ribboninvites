@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Create your invitation · RibbonInvites</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#4A1C2F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<style>
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:48px;padding:32px 0 40px;align-items:start}
+.head{display:grid;gap:10px;margin-bottom:8px}
+.head h1{font-size:clamp(2rem,4vw,2.8rem);font-weight:400;letter-spacing:-.025em}
+.head p{color:var(--muted)}
+.sec{margin-top:18px}
+.sec .card{padding:28px}
+.sec-h{display:flex;gap:14px;align-items:center;margin-bottom:22px}
+.sec-h .n{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--ribbon-soft);color:var(--ribbon);font:500 .95rem/1 var(--display);flex:none}
+.sec-h h2{font-size:1.35rem;font-weight:450}
+.sec-h p{color:var(--muted);font-size:.88rem}
+.tpls{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.tpl{position:relative;border:1px solid var(--line);border-radius:var(--r);padding:8px 8px 12px;background:var(--surface);cursor:pointer;text-align:left;font:inherit;color:inherit;display:grid;gap:10px;transition:border-color .15s,box-shadow .15s}
+.tpl:hover{border-color:var(--line-2)}
+.tpl .sw{aspect-ratio:3/4;border-radius:10px;display:grid;place-items:center;overflow:hidden}
+.tpl .sw img{height:88%;width:auto;border-radius:6px;box-shadow:0 6px 14px rgba(0,0,0,.25)}
+.tpl b{display:block;font-size:.92rem;padding:0 4px}
+.tpl small{display:block;color:var(--muted);font-size:.76rem;line-height:1.35;padding:0 4px}
+.tpl .tick{position:absolute;top:14px;right:14px;width:24px;height:24px;border-radius:50%;background:var(--ribbon);color:#fff;display:none;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.tpl .tick .i{width:14px;height:14px;stroke-width:2.4}
+.tpl[aria-pressed="true"]{border-color:var(--ribbon);box-shadow:0 0 0 1px var(--ribbon)}
+.tpl[aria-pressed="true"] .tick{display:grid}
+@media (max-width:760px){.tpls{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:420px){.tpls{grid-template-columns:repeat(2,1fr)}}
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.types button{display:grid;gap:4px;text-align:left;padding:14px 16px;border-radius:var(--r-sm);border:1px solid var(--line-2);background:var(--surface);color:var(--ink);cursor:pointer;font:inherit}
+.types button b{font-weight:600;font-size:.95rem}
+.types button span{color:var(--muted);font-size:.8rem}
+.types button[aria-pressed="true"]{border-color:var(--ribbon);background:var(--ribbon-soft);box-shadow:0 0 0 1px var(--ribbon)}
+@media (max-width:640px){.types{grid-template-columns:1fr}}
+.prog{display:grid;gap:8px}
+.prog .r{display:grid;grid-template-columns:28px 130px 1fr 38px;gap:8px;align-items:center}
+.prog .r .num{color:var(--faint);font-size:.82rem;text-align:center}
+@media (max-width:520px){.prog .r{grid-template-columns:96px 1fr 38px}.prog .r .num{display:none}}
+.planpick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.planpick label{position:relative;border:1px solid var(--line-2);border-radius:var(--r-sm);padding:16px;cursor:pointer;display:grid;gap:2px;background:var(--surface)}
+.planpick input{position:absolute;opacity:0;pointer-events:none}
+.planpick label:has(input:checked){border-color:var(--ribbon);box-shadow:0 0 0 1px var(--ribbon);background:var(--ribbon-soft)}
+.planpick label:has(input:focus-visible){outline:2px solid var(--ribbon);outline-offset:2px}
+.planpick b{font-size:.95rem}.planpick span{font-size:.82rem;color:var(--muted)}.planpick strong{font:400 1.2rem/1.2 var(--display);margin-top:6px}
+.planpick em{position:absolute;top:-9px;right:10px;font:700 .64rem/1 var(--ui);letter-spacing:.06em;font-style:normal;background:var(--ribbon);color:#fff;padding:5px 8px;border-radius:999px}
+@media (max-width:760px){.planpick{grid-template-columns:1fr 1fr}}
+.savebar{position:sticky;bottom:0;z-index:20;margin-top:22px;padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg) 35%)}
+.savebar .card{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 12px 12px 20px;border-radius:999px;box-shadow:var(--shadow-lg)}
+@media (max-width:640px){.savebar .card{border-radius:var(--r-lg);padding:12px}.savebar #okline{display:none}.savebar .btn{flex:1}}
+.savebar .err{color:var(--bad);font-size:.9rem;font-weight:500;display:flex;gap:8px;align-items:center}
+.savebar .ok{color:var(--muted);font-size:.88rem;display:flex;gap:8px;align-items:center}
+.preview{position:sticky;top:calc(var(--top-h) + 20px);display:grid;justify-items:center;gap:14px}
+.preview .lbl{justify-self:stretch;justify-content:space-between;color:var(--muted);font-weight:600;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.ptabs{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.ptabs button{font:600 .78rem/1 var(--ui);padding:8px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer}
+.ptabs button[aria-pressed="true"]{color:var(--bg);background:var(--ink);border-color:var(--ink)}
+.mobile-only{display:none}
+@media (max-width:1000px){.layout{grid-template-columns:1fr}.preview{display:none}.mobile-only{display:inline-flex}}
+.done-steps{display:grid;gap:10px;margin:18px 0}
+.done-steps div{display:flex;gap:12px;align-items:flex-start;font-size:.92rem;color:var(--ink-2)}
+.done-steps .i{color:var(--ok);margin-top:2px}
+.fullpv{position:fixed;inset:0;z-index:160;background:#111;display:grid;grid-template-rows:auto 1fr}
+.fullpv header{display:flex;align-items:center;gap:10px;padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:#1B1517;color:#F5EFF0}
+.fullpv iframe{border:0;width:100%;height:100%}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" aria-label="RibbonInvites home"><img src="/favicon.svg" alt=""><span class="wm" data-wordmark>RibbonInvites</span></a>
+  <span class="spacer"></span>
+  <a class="btn ghost sm" id="backDash" hidden><svg class="i"><use href="/img/icons.svg#arrow-left"/></svg>Back to dashboard</a>
+  <a class="btn ghost sm hide-sm" id="helpBtn" target="_blank" rel="noopener"><svg class="i"><use href="/img/icons.svg#whatsapp"/></svg>Need help?</a>
+</div></header>
+
+<main class="wrap layout">
+  <form id="form" novalidate>
+    <div class="head">
+      <span class="eyebrow" id="eyebrow">Free to design</span>
+      <h1 id="title">Create your invitation</h1>
+      <p id="subtitle">Fill in your details and watch your invitation come to life. Nothing is sent to guests until you choose to.</p>
+    </div>
+
+    <section class="sec"><div class="card">
+      <div class="sec-h"><span class="n">1</span><div><h2>Choose a design</h2><p>You can switch designs at any time.</p></div></div>
+      <div class="tpls" id="tpls" role="group" aria-label="Design"></div>
+    </div></section>
+
+    <section class="sec"><div class="card stack">
+      <div class="sec-h" style="margin-bottom:6px"><span class="n">2</span><div><h2>The occasion</h2><p>The suggested wording adapts to your event.</p></div></div>
+      <div class="types" id="types" role="group" aria-label="Type of event">
+        <button type="button" data-type="wedding"><b>Wedding</b><span>Ceremony and reception</span></button>
+        <button type="button" data-type="introduction"><b>Introduction</b><span>Kwanjula, kukyala and more</span></button>
+        <button type="button" data-type="celebration"><b>Celebration</b><span>Anniversaries, parties, dinners</span></button>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="a">First name</label><input class="input" id="a" autocomplete="off" placeholder="e.g. Joe"></div>
+        <div class="field"><label class="lbl" for="b">Second name</label><input class="input" id="b" autocomplete="off" placeholder="e.g. Jane"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="famA">First family <span class="opt">Optional</span></label><input class="input" id="famA" placeholder="e.g. Mr. & Mrs. John Doe"></div>
+        <div class="field"><label class="lbl" for="famB">Second family <span class="opt">Optional</span></label><input class="input" id="famB" placeholder="e.g. Mr. & Mrs. Robert Smith"></div>
+      </div>
+    </div></section>
+
+    <section class="sec"><div class="card stack">
+      <div class="sec-h" style="margin-bottom:6px"><span class="n">3</span><div><h2>When and where</h2><p>Times are shown in East Africa Time.</p></div></div>
+      <div class="grid3">
+        <div class="field"><label class="lbl" for="date">Date</label><input class="input" id="date" type="date"></div>
+        <div class="field"><label class="lbl" for="start">Starts at</label><input class="input" id="start" type="time" value="14:00"></div>
+        <div class="field"><label class="lbl" for="finish">Ends at</label><input class="input" id="finish" type="time" value="23:00"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="venueA">Main venue</label><input class="input" id="venueA" placeholder="e.g. Namirembe Cathedral"></div>
+        <div class="field"><label class="lbl" for="mapA">Google Maps link <span class="opt">Recommended</span></label><input class="input" id="mapA" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/…"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="venueB">Reception venue <span class="opt">Optional</span></label><input class="input" id="venueB" placeholder="e.g. Speke Resort Munyonyo"></div>
+        <div class="field"><label class="lbl" for="mapB">Google Maps link <span class="opt">Optional</span></label><input class="input" id="mapB" type="url" inputmode="url" placeholder="https://maps.app.goo.gl/…"></div>
+      </div>
+      <div class="notice"><svg class="i"><use href="/img/icons.svg#pin"/></svg><span>In Google Maps, find your venue, tap <b>Share</b> and copy the link. Without one, guests get directions by venue name, which can be less precise.</span></div>
+    </div></section>
+
+    <section class="sec"><div class="card stack">
+      <div class="sec-h" style="margin-bottom:6px"><span class="n">4</span><div><h2>Programme</h2><p>Leave empty to hide this page.</p></div></div>
+      <div class="prog" id="prog"></div>
+      <div><button type="button" class="btn sm" id="addRow"><svg class="i"><use href="/img/icons.svg#plus"/></svg>Add a line</button></div>
+      <div class="field"><label class="lbl" for="dress">Dress code <span class="opt">Optional</span></label><input class="input" id="dress" placeholder="e.g. Formal, in shades of blush or sage"></div>
+    </div></section>
+
+    <section class="sec"><div class="card stack">
+      <div class="sec-h" style="margin-bottom:6px"><span class="n">5</span><div><h2>Wording and replies</h2><p>Leave wording empty to use our suggestion, shown in grey.</p></div></div>
+      <div class="field"><label class="lbl" for="kicker">Opening line</label><input class="input" id="kicker" maxlength="60"><p class="hint">Shown above your names. Write it in any language.</p></div>
+      <div class="field"><label class="lbl" for="inviteLine">Invitation wording</label><textarea class="textarea" id="inviteLine" maxlength="400" style="min-height:90px"></textarea></div>
+      <div class="field"><label class="lbl" for="verse">Closing line <span class="opt">Optional</span></label><input class="input" id="verse" maxlength="160" placeholder="Two hearts, one story, and a seat kept just for you."></div>
+      <div class="grid2">
+        <div class="field"><label class="lbl" for="rsvpBy">Reply by <span class="opt">Optional</span></label><input class="input" id="rsvpBy" type="date"></div>
+        <div class="field"><label class="lbl" for="hostPhone">WhatsApp for guest questions <span class="opt">Optional</span></label><input class="input" id="hostPhone" type="tel" inputmode="tel" placeholder="e.g. 0772 123 456"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="openRsvp"><div><b>Allow replies from a general link</b><span>Handy for sharing in a family WhatsApp group. Guests type their own name, and each reply counts toward your guest limit.</span></div></label>
+    </div></section>
+
+    <section class="sec" id="planSec"><div class="card stack">
+      <div class="sec-h" style="margin-bottom:6px"><span class="n">6</span><div><h2>Guest list size</h2><p>You can change this until you pay.</p></div></div>
+      <div class="planpick" id="planpick"></div>
+      <div class="notice"><svg class="i"><use href="/img/icons.svg#info"/></svg><span>Your invitation starts in preview, free. Test it with up to 5 guests, including yourself, then pay with Mobile Money to send to everyone.</span></div>
+    </div></section>
+
+    <div class="savebar"><div class="card">
+      <span class="err" id="err" role="alert" hidden></span>
+      <span class="ok" id="okline"><svg class="i"><use href="/img/icons.svg#lock"/></svg>Private until you share it</span>
+      <span class="spacer"></span>
+      <button class="btn mobile-only" type="button" id="mPrev"><svg class="i"><use href="/img/icons.svg#eye"/></svg>Preview</button>
+      <button class="btn primary" type="submit" id="save">Create my invitation<svg class="i"><use href="/img/icons.svg#arrow-right"/></svg></button>
+    </div></div>
+  </form>
+
+  <aside class="preview" aria-label="Live preview">
+    <div class="lbl"><span>Live preview</span><span id="pvState" class="faint" style="text-transform:none;letter-spacing:0;font-weight:500">Updated</span></div>
+    <div class="phone"><iframe id="pv" title="Invitation preview"></iframe></div>
+    <div class="ptabs" id="ptabs">
+      <button type="button" data-page="" aria-pressed="true">Cover</button>
+      <button type="button" data-page="names" aria-pressed="false">Names</button>
+      <button type="button" data-page="invite" aria-pressed="false">Wording</button>
+      <button type="button" data-page="date" aria-pressed="false">Date</button>
+      <button type="button" data-page="venue" aria-pressed="false">Venue</button>
+      <button type="button" data-page="day" aria-pressed="false">Programme</button>
+      <button type="button" data-page="rsvp" aria-pressed="false">Reply</button>
+    </div>
+  </aside>
+</main>
+
+<script src="/js/brand.js"></script>
+<script src="/js/ui.js"></script>
+<script>
+(function () {
+  const { $, $$, esc, api, ugx, icon } = UI; const B = BRAND;
+  UI.header(); UI.brand();
+  $('#helpBtn').href = UI.wa(B.salesWhatsApp, `Hello ${B.name}! I need some help creating my invitation.`);
+  const qs = new URLSearchParams(location.search);
+  const editSlug = qs.get('slug'), editKey = qs.get('k');
+  const SUG = {
+    wedding: { kicker: 'TOGETHER WITH THEIR FAMILIES', invite: 'would be honoured to have you beside them as they say “I do” and begin their life together.' },
+    introduction: { kicker: 'WITH JOY, THE FAMILIES OF', invite: 'request the honour of your presence as our families meet, celebrate and bless this union.' },
+    celebration: { kicker: 'YOU ARE INVITED TO CELEBRATE WITH', invite: 'would love you to join them for a day of joy, good food and dancing.' }
+  };
+  const tplOk = id => B.templates.some(t => t.id === id);
+  const state = {
+    template: tplOk(qs.get('template')) ? qs.get('template') : 'porcelain', type: 'wedding',
+    plan: B.plans.some(p => p.id === qs.get('plan')) ? qs.get('plan') : 'classic',
+    timeline: [['2:00 pm', 'Ceremony'], ['4:30 pm', 'Photos and cocktails'], ['6:30 pm', 'Reception dinner'], ['9:00 pm', 'First dance and party']]
+  };
+
+  $('#tpls').innerHTML = B.templates.map(t => `<button type="button" class="tpl" data-t="${t.id}" aria-pressed="false">
+      <span class="tick">${icon('check')}</span>
+      <span class="sw" style="background:radial-gradient(120% 80% at 50% 30%,${t.swatch[1]},${t.swatch[0]})"><img src="/img/tpl-${t.id}.jpg" alt="" loading="lazy"></span>
+      <span><b>${esc(t.name)}</b><small>${esc(t.opening)}</small></span></button>`).join('');
+  $$('.tpl').forEach(b => b.onclick = () => { state.template = b.dataset.t; sync(); refresh(true); });
+  $$('#types button').forEach(b => b.onclick = () => { state.type = b.dataset.type; sync(); refresh(); });
+  $('#planpick').innerHTML = B.plans.map(p => `<label>${p.popular ? '<em>POPULAR</em>' : ''}<input type="radio" name="plan" value="${p.id}"><b>${esc(p.name)}</b><span>Up to ${p.guests} guests</span><strong>${ugx(p.price)}</strong></label>`).join('');
+  $$('input[name=plan]').forEach(r => r.onchange = () => state.plan = r.value);
+
+  function sync() {
+    $$('.tpl').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === state.template));
+    $$('#types button').forEach(b => b.setAttribute('aria-pressed', b.dataset.type === state.type));
+    const s = SUG[state.type]; $('#kicker').placeholder = s.kicker; $('#inviteLine').placeholder = s.invite;
+    $$('input[name=plan]').forEach(r => r.checked = r.value === state.plan);
+  }
+  function drawProg() {
+    $('#prog').innerHTML = state.timeline.map((r, i) => `<div class="r"><span class="num">${i + 1}</span>
+      <input class="input" data-i="${i}" data-c="0" value="${esc(r[0])}" placeholder="Time" aria-label="Time for line ${i + 1}">
+      <input class="input" data-i="${i}" data-c="1" value="${esc(r[1])}" placeholder="What happens" aria-label="Activity for line ${i + 1}">
+      <button type="button" class="btn ghost icon-btn" data-del="${i}" aria-label="Remove line ${i + 1}">${icon('trash')}</button></div>`).join('');
+  }
+  $('#prog').addEventListener('input', e => { const t = e.target; if (t.dataset.i) { state.timeline[t.dataset.i][t.dataset.c] = t.value; refresh(); } });
+  $('#prog').addEventListener('click', e => { const d = e.target.closest('[data-del]'); if (d) { state.timeline.splice(+d.dataset.del, 1); drawProg(); refresh(); } });
+  $('#addRow').onclick = () => { if (state.timeline.length >= 10) return UI.toast('You can add up to 10 lines.', { error: true }); state.timeline.push(['', '']); drawProg(); $('#prog').lastElementChild.querySelector('input').focus(); };
+
+  const F = ['a', 'b', 'famA', 'famB', 'venueA', 'mapA', 'venueB', 'mapB', 'dress', 'kicker', 'inviteLine', 'verse', 'rsvpBy', 'hostPhone'];
+  function build() {
+    const v = id => $('#' + id).value.trim();
+    const ev = { template: state.template, type: state.type, timeline: state.timeline.filter(r => r[0].trim() || r[1].trim()), openRsvp: $('#openRsvp').checked };
+    F.forEach(f => ev[f] = v(f));
+    ev.hostPhone = UI.phoneDigits(ev.hostPhone);
+    for (const m of ['mapA', 'mapB']) if (ev[m] && !/^https?:\/\//i.test(ev[m])) ev[m] = /\./.test(ev[m]) && !/\s/.test(ev[m]) ? 'https://' + ev[m] : ev[m];
+    const d = v('date');
+    if (d) {
+      ev.date = `${d}T${v('start') || '14:00'}:00+03:00`;
+      ev.endDate = `${d}T${v('finish') || '23:00'}:00+03:00`;
+      if (Date.parse(ev.endDate) <= Date.parse(ev.date)) ev.endDate = new Date(Date.parse(ev.date) + 9 * 3600e3).toISOString();
+    } else { ev.date = ''; ev.endDate = ''; }
+    return ev;
+  }
+
+  // live preview (the invitation reads window.parent.__draft)
+  const pv = $('#pv'); let page = '', tmr = null;
+  function draftUrl(p) { return `/i/draft?draft=1&embed=1${p ? '&open=1&page=' + p : ''}&t=${Date.now()}`; }
+  function refresh(now) {
+    const ev = build();
+    if (!ev.a) ev.a = 'Joe'; if (!ev.b) ev.b = 'Jane';
+    if (!ev.date) { const y = new Date().getFullYear() + 1; ev.date = `${y}-06-20T14:00:00+03:00`; ev.endDate = `${y}-06-20T23:00:00+03:00`; }
+    if (!ev.venueA) ev.venueA = 'Your venue';
+    window.__draft = ev;
+    $('#pvState').textContent = 'Updating…';
+    clearTimeout(tmr); tmr = setTimeout(() => { pv.src = draftUrl(page); setTimeout(() => $('#pvState').textContent = 'Updated', 600); }, now ? 0 : 700);
+  }
+  $$('#ptabs button').forEach(b => b.onclick = () => { page = b.dataset.page; $$('#ptabs button').forEach(x => x.setAttribute('aria-pressed', x === b)); refresh(true); });
+  $('#form').addEventListener('input', e => { if (!e.target.dataset.i) { e.target.removeAttribute('aria-invalid'); refresh(); } });
+  $('#mPrev').onclick = () => {
+    refresh(true);
+    const o = document.createElement('div'); o.className = 'fullpv';
+    o.innerHTML = `<header><button class="btn sm" type="button" data-x style="background:#2B2326;color:#F5EFF0;border-color:#3B3134">${icon('x')}Close preview</button><span class="spacer"></span><span class="small" style="opacity:.7">Preview</span></header><iframe title="Invitation preview" src="${draftUrl('')}"></iframe>`;
+    o.querySelector('[data-x]').onclick = () => o.remove(); document.body.appendChild(o);
+  };
+
+  async function init() {
+    if (editSlug && editKey) {
+      $('#eyebrow').textContent = 'Editing';
+      $('#title').textContent = 'Edit your invitation';
+      $('#subtitle').textContent = 'Changes go live for every guest as soon as you save. There is no need to resend links.';
+      $('#save').innerHTML = `Save changes${icon('check')}`; $('#planSec').hidden = true;
+      const back = $('#backDash'); back.hidden = false; back.href = `/dashboard/${encodeURIComponent(editSlug)}?k=${encodeURIComponent(editKey)}`;
+      try {
+        const { event: ev } = await api(`event?slug=${encodeURIComponent(editSlug)}&preview=1`, { key: editKey });
+        Object.assign(state, { template: tplOk(ev.template) ? ev.template : 'porcelain', type: ev.type || 'wedding', timeline: (ev.timeline || []).map(r => [r[0], r[1]]) });
+        F.forEach(f => { if (ev[f] != null) $('#' + f).value = ev[f]; });
+        if (ev.hostPhone) $('#hostPhone').value = '+' + ev.hostPhone;
+        $('#openRsvp').checked = !!ev.openRsvp;
+        if (ev.date) { $('#date').value = ev.date.slice(0, 10); $('#start').value = ev.date.slice(11, 16); }
+        if (ev.endDate && /T\d\d:\d\d:00\+03:00$/.test(ev.endDate)) $('#finish').value = ev.endDate.slice(11, 16);
+      } catch (e) { showErr(e.message); }
+    }
+    sync(); drawProg(); refresh(true);
+  }
+  init();
+
+  function showErr(msg, field) {
+    const err = $('#err'); err.hidden = false; err.innerHTML = icon('alert') + esc(msg); $('#okline').hidden = true;
+    if (field) { const f = $('#' + field); f.setAttribute('aria-invalid', 'true'); f.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => f.focus({ preventScroll: true }), 300); }
+  }
+  function clearErr() { $('#err').hidden = true; $('#okline').hidden = false; }
+
+  $('#form').addEventListener('submit', async e => {
+    e.preventDefault(); clearErr();
+    const ev = build();
+    if (!ev.a) return showErr('Please add the first name.', 'a');
+    if (!ev.b) return showErr('Please add the second name.', 'b');
+    if (!ev.date) return showErr('Please choose the date.', 'date');
+    if (!ev.venueA) return showErr('Please add the main venue.', 'venueA');
+    if (ev.rsvpBy && ev.rsvpBy > ev.date.slice(0, 10)) return showErr('The reply-by date should be before the event.', 'rsvpBy');
+    const btn = $('#save');
+    await UI.busy(btn, async () => {
+      btn.innerHTML = '<span class="spin"></span>Saving';
+      try {
+        if (editSlug) {
+          await api(`event?slug=${encodeURIComponent(editSlug)}`, { method: 'PUT', key: editKey, body: { event: ev } });
+          UI.toast('Changes saved');
+          setTimeout(() => location.href = `/dashboard/${encodeURIComponent(editSlug)}?k=${encodeURIComponent(editKey)}`, 500);
+          return;
+        }
+        const r = await api('events', { method: 'POST', body: { event: ev, plan: state.plan } });
+        const dash = `${location.origin}/dashboard/${r.slug}?k=${r.adminKey}`;
+        try {
+          const saved = JSON.parse(localStorage.getItem('myInvites') || '[]').filter(x => x.slug !== r.slug);
+          saved.unshift({ slug: r.slug, k: r.adminKey, name: `${ev.a} & ${ev.b}`, at: Date.now() });
+          localStorage.setItem('myInvites', JSON.stringify(saved.slice(0, 10)));
+        } catch {}
+        const m = UI.modal(`<span class="badge ok">Created</span>
+          <h3 class="h3" style="margin-top:12px">Your invitation is ready</h3>
+          <p class="muted" style="margin-top:8px">Below is your private dashboard link. It’s the key to your guest list, so save it somewhere safe and don’t share it with guests.</p>
+          <div class="linkbox" style="margin-top:16px"><code>${esc(dash)}</code><button class="btn sm" type="button" id="cp">${icon('copy')}Copy</button></div>
+          <div class="done-steps">
+            <div>${icon('check-circle')}<span>Your invitation is saved in preview, free.</span></div>
+            <div>${icon('check-circle')}<span>Next, add yourself as a test guest and open your personal link.</span></div>
+          </div>
+          <div class="row"><a class="btn wa" target="_blank" rel="noopener" href="${UI.wa('', `My RibbonInvites dashboard for ${ev.a} & ${ev.b}: ${dash}`)}">${icon('whatsapp')}Save to my WhatsApp</a>
+          <span class="spacer"></span><a class="btn primary" href="${esc(dash)}">Open my dashboard${icon('arrow-right')}</a></div>`);
+        m.querySelector('#cp').onclick = () => UI.copy(dash, 'Dashboard link copied');
+      } catch (x) { showErr(x.message); }
+    });
+  });
+})();
+</script>
+</body>
+</html>

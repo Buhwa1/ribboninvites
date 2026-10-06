@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gate check-in · RibbonInvites</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1E1619">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+<style>
+body{min-height:100vh}
+.wrap{max-width:560px}
+.gh{padding:16px 0 6px;display:flex;align-items:center;gap:12px}
+.gh img{width:38px;height:38px;border-radius:10px}
+.gh h1{font-size:1.45rem;font-weight:450}
+.gh .muted{font-size:.84rem;display:flex;gap:6px;align-items:center}
+.count{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 14px}
+.count div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 10px;text-align:center}
+.count b{display:block;font:400 1.9rem/1.05 var(--display)}
+.count small{color:var(--muted);font-size:.72rem;font-weight:700;letter-spacing:.08em}
+.scan{position:relative;border-radius:var(--r-lg);overflow:hidden;background:#140F11;aspect-ratio:1;display:grid;place-items:center}
+.scan video{width:100%;height:100%;object-fit:cover}
+.scan .frame{position:absolute;inset:17%;border-radius:22px;box-shadow:0 0 0 999px rgba(0,0,0,.42)}
+.scan .frame::before,.scan .frame::after{content:"";position:absolute;inset:-2px;border-radius:22px;border:3px solid #E3C08A;-webkit-mask:linear-gradient(#000 0 0) top/100% 26% no-repeat,linear-gradient(#000 0 0) bottom/100% 26% no-repeat;mask:linear-gradient(#000 0 0) top/100% 26% no-repeat,linear-gradient(#000 0 0) bottom/100% 26% no-repeat}
+.scan .frame::after{-webkit-mask:linear-gradient(#000 0 0) left/26% 100% no-repeat,linear-gradient(#000 0 0) right/26% 100% no-repeat;mask:linear-gradient(#000 0 0) left/26% 100% no-repeat,linear-gradient(#000 0 0) right/26% 100% no-repeat}
+.scan .line{position:absolute;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,#E3C08A,transparent);animation:sweep 2.2s ease-in-out infinite}
+@keyframes sweep{0%,100%{top:22%}50%{top:76%}}
+.scan .start{position:absolute;inset:0;display:grid;place-items:center;color:#F5EFF0;text-align:center;padding:24px}
+.scan .start .i{width:40px;height:40px;color:#E3C08A;margin:0 auto 12px}
+.scan .start p{margin-bottom:16px;color:rgba(245,239,240,.8)}
+.scan .stop{position:absolute;right:12px;top:12px;background:rgba(0,0,0,.5);color:#fff;border-color:transparent}
+.result{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:24px;animation:fade .15s ease}
+.result .box{width:100%;max-width:420px;border-radius:var(--r-xl);padding:34px 26px;text-align:center;display:grid;justify-items:center;gap:10px;box-shadow:var(--shadow-lg);animation:pop .22s cubic-bezier(.2,.8,.2,1)}
+.result .ic{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.result .ic .i{width:38px;height:38px;stroke-width:2.4}
+.result h2{font-size:1.7rem;font-weight:450;line-height:1.15}
+.result .admit{font:600 1rem/1 var(--ui);letter-spacing:.06em;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.7)}
+.result.ok{background:rgba(20,60,38,.55)}.result.ok .box{background:#ECF7F0;color:#123B25}.result.ok .ic{background:#23704A}
+.result.warn{background:rgba(70,48,10,.5)}.result.warn .box{background:#FFF6E4;color:#4A3307}.result.warn .ic{background:#B07A18}
+.result.bad{background:rgba(80,16,14,.55)}.result.bad .box{background:#FDEEEC;color:#5A1512}.result.bad .ic{background:#B02A26}
+.result p{opacity:.85}
+.list{display:grid;gap:8px;margin:12px 0 60px}
+.li{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 10px 10px 12px}
+.li .av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--ribbon-soft);color:var(--ribbon);font:600 .8rem/1 var(--ui);flex:none}
+.li.in .av{background:var(--ok-soft);color:var(--ok)}
+.li .n{flex:1;min-width:0}
+.li .n b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.li .n span{font-size:.8rem;color:var(--muted)}
+.search{position:relative;margin-top:10px}
+.search .i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--faint)}
+.search .input{padding-left:42px}
+.fatal{padding:90px 10px;display:grid;justify-items:center;gap:12px;text-align:center}
+.fatal .i{width:40px;height:40px;color:var(--faint)}
+</style>
+</head>
+<body>
+<main class="wrap" id="app">
+  <div class="gh"><img src="/favicon.svg" alt=""><div style="flex:1;min-width:0"><h1 id="title">Gate check-in</h1><div class="muted"><svg class="i i-sm"><use href="/img/icons.svg#scan"/></svg><span id="sub">Loading guest list…</span></div></div>
+    <button class="btn sm icon-btn" id="reload" aria-label="Refresh"><svg class="i"><use href="/img/icons.svg#refresh"/></svg></button></div>
+  <div class="count" id="count"></div>
+  <div class="scan" id="scan">
+    <video id="video" playsinline muted hidden></video><div class="frame" id="sframe" hidden></div><div class="line" id="sline" hidden></div>
+    <button class="btn sm stop" id="stopBtn" hidden><svg class="i"><use href="/img/icons.svg#x"/></svg>Stop</button>
+    <div class="start" id="startBox"><div><svg class="i"><use href="/img/icons.svg#qr"/></svg><p>Scan each guest’s entry pass to welcome them in.</p><button class="btn gold lg" id="startBtn"><svg class="i"><use href="/img/icons.svg#camera"/></svg>Start scanning</button></div></div>
+  </div>
+  <h2 class="h3" style="margin-top:24px;font-size:1.25rem">Find a guest</h2>
+  <label class="search"><svg class="i"><use href="/img/icons.svg#search"/></svg><input class="input" id="q" placeholder="Type a name" autocomplete="off" aria-label="Find a guest by name"></label>
+  <div class="list" id="list"></div>
+</main>
+<div id="result" aria-live="assertive"></div>
+<script src="/vendor/jsQR.min.js" defer></script>
+<script src="/js/brand.js"></script>
+<script src="/js/ui.js"></script>
+<script>
+(function () {
+  const { $, esc, icon, api, toast, ago } = UI;
+  const slug = decodeURIComponent((location.pathname.match(/\/checkin\/([^/?#]+)/) || [])[1] || '');
+  const key = new URLSearchParams(location.search).get('k') || '';
+  const initials = n => (n.replace(/^(mr|mrs|ms|dr|prof|rev|aunt|uncle)\.?\s+(&\s+(mr|mrs|ms|dr)\.?\s+)?/i, '').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('') || '?').toUpperCase();
+  let data = null, last = '', lastAt = 0, stream = null, scanning = false, resultTimer = null;
+
+  async function load() {
+    try { data = await api(`gate?slug=${encodeURIComponent(slug)}&k=${encodeURIComponent(key)}`); draw(); }
+    catch (x) { $('#app').innerHTML = `<div class="fatal">${icon('lock')}<h1 class="h2" style="font-size:1.8rem">This check-in link isn’t valid</h1><p class="muted">${esc(x.message)}. Ask the hosts to send the link again.</p></div>`; }
+  }
+  function draw() {
+    const ev = data.event, s = data.stats;
+    document.title = `Check-in · ${ev.a} & ${ev.b}`;
+    $('#title').textContent = `${ev.a} & ${ev.b}`; $('#sub').textContent = `Gate check-in · ${data.guests.length} guests on the list`;
+    $('#count').innerHTML = `<div><b>${s.checkedIn}</b><small>ARRIVED</small></div><div><b>${s.checkedInPeople}</b><small>PEOPLE IN</small></div><div><b>${Math.max(s.yes - s.checkedIn, 0)}</b><small>EXPECTED</small></div>`;
+    const q = $('#q').value.trim().toLowerCase();
+    const list = data.guests.filter(g => !q || g.name.toLowerCase().includes(q))
+      .sort((a, b) => (!!a.checkedInAt - !!b.checkedInAt) || ((a.status === 'yes' ? 0 : 1) - (b.status === 'yes' ? 0 : 1)) || a.name.localeCompare(b.name)).slice(0, 80);
+    $('#list').innerHTML = list.map(g => `<div class="li${g.checkedInAt ? ' in' : ''}"><span class="av">${g.checkedInAt ? icon('check', 'i-sm') : esc(initials(g.name))}</span><div class="n"><b>${esc(g.name)}</b>
+      <span>${g.checkedInAt ? `Arrived ${ago(g.checkedInAt)}` : g.status === 'yes' ? `Attending · ${g.count || 1} ${(g.count || 1) === 1 ? 'person' : 'people'}` : g.status === 'no' ? 'Declined' : 'No reply yet'}</span></div>
+      ${g.checkedInAt ? `<button class="btn sm ghost" data-undo="${g.id}">Undo</button>` : `<button class="btn sm primary" data-in="${g.id}">Check in</button>`}</div>`).join('')
+      || `<div class="empty">${icon('search')}<span>No guest found with that name.</span></div>`;
+  }
+  $('#q').oninput = () => data && draw();
+  $('#reload').onclick = () => load().then(() => toast('Guest list updated'));
+  $('#list').addEventListener('click', e => { const a = e.target.closest('[data-in]'), u = e.target.closest('[data-undo]'); if (a) checkin(a.dataset.in); if (u) checkin(u.dataset.undo, true); });
+
+  function show(kind, ic, title, text, admit) {
+    clearTimeout(resultTimer);
+    const r = $('#result');
+    r.innerHTML = `<div class="result ${kind}" role="alert"><div class="box"><span class="ic">${icon(ic)}</span><h2>${esc(title)}</h2>${admit ? `<span class="admit">ADMIT ${admit}</span>` : ''}<p>${esc(text)}</p>
+      <button class="btn ${kind === 'ok' ? 'primary' : ''}" type="button" data-ok>${scanning ? 'Scan next guest' : 'Done'}</button></div></div>`;
+    const close = () => { r.innerHTML = ''; };
+    r.querySelector('[data-ok]').onclick = close; r.querySelector('.result').onclick = e => { if (e.target.classList.contains('result')) close(); };
+    if (kind === 'ok') resultTimer = setTimeout(close, 3500);
+    if (navigator.vibrate) navigator.vibrate(kind === 'ok' ? 90 : [70, 60, 70]);
+  }
+  async function checkin(id, undo) {
+    try {
+      const r = await api('checkin', { method: 'POST', body: { slug, k: key, id, undo: !!undo } });
+      const g = r.guest;
+      if (undo) toast(`Check-in undone for ${g.name}`);
+      else if (r.already) show('warn', 'alert', 'Already checked in', `${g.name} arrived ${ago(g.checkedInAt)}. Please check with the hosts if this seems wrong.`);
+      else if (g.status === 'yes') show('ok', 'check', `Welcome, ${g.name}`, 'Enjoy the celebration.', g.count || 1);
+      else show('warn', 'info', `Welcome, ${g.name}`, g.status === 'no' ? 'They had declined, but they are on the guest list.' : 'They hadn’t replied, but they are on the guest list.', g.seats || 1);
+      await load();
+    } catch (x) { show('bad', 'x', 'Not on the guest list', x.message); }
+  }
+
+  function onCode(text) {
+    const now = Date.now(); if (text === last && now - lastAt < 4000) return; last = text; lastAt = now;
+    if ($('#result').innerHTML) return;
+    const m = /^INV:([^:]+):([a-z0-9]+)$/.exec(String(text).trim());
+    if (!m) return show('bad', 'x', 'Not an entry pass', 'This QR code isn’t a RibbonInvites entry pass.');
+    if (m[1] !== slug) return show('bad', 'x', 'Pass for another event', 'This entry pass belongs to a different celebration.');
+    checkin(m[2]);
+  }
+  function stop() { scanning = false; if (stream) stream.getTracks().forEach(t => t.stop()); stream = null; $('#video').hidden = true; $('#sframe').hidden = true; $('#sline').hidden = true; $('#stopBtn').hidden = true; $('#startBox').hidden = false; }
+  $('#stopBtn').onclick = stop;
+  $('#startBtn').onclick = async () => {
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+      const v = $('#video'); v.srcObject = stream; v.hidden = false; $('#sframe').hidden = false; $('#sline').hidden = false; $('#stopBtn').hidden = false; $('#startBox').hidden = true; await v.play();
+      scanning = true;
+      const det = ('BarcodeDetector' in window) ? new BarcodeDetector({ formats: ['qr_code'] }) : null;
+      const c = document.createElement('canvas'), ctx = c.getContext('2d', { willReadFrequently: true });
+      const loop = async () => {
+        if (!scanning) return;
+        if (v.readyState >= 2) {
+          try {
+            if (det) { const r = await det.detect(v); if (r[0]) onCode(r[0].rawValue); }
+            else if (window.jsQR) { const w = 480, h = Math.round(v.videoHeight / v.videoWidth * w) || 480; c.width = w; c.height = h; ctx.drawImage(v, 0, 0, w, h);
+              const r = jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'dontInvert' }); if (r) onCode(r.data); }
+          } catch {}
+        }
+        setTimeout(() => requestAnimationFrame(loop), 160);
+      };
+      loop();
+    } catch { stop(); show('bad', 'camera', 'Camera unavailable', 'Allow camera access in your browser settings, or find guests by name below.'); }
+  };
+  load(); setInterval(() => { if (!document.hidden) load(); }, 20000);
+})();
+</script>
+</body>
+</html>
