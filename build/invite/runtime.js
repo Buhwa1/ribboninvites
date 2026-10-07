@@ -114,14 +114,6 @@
     $('calLink').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(`${ev.a} & ${ev.b}`)
       + '&dates=' + z(when) + '/' + z(end) + '&location=' + encodeURIComponent(ev.mapA || ev.venueA || '');
 
-    // programme
-    const tl = $('timeline');
-    (ev.timeline || []).forEach(([t, what], k) => {
-      const li = document.createElement('li'); li.className = 'rv'; li.style.setProperty('--i', k + 1);
-      li.innerHTML = '<time></time><span></span>'; li.querySelector('time').textContent = String(t).toUpperCase(); li.querySelector('span').textContent = what;
-      tl.appendChild(li);
-    });
-
     // which pages to show
     const now = Date.now();
     const afterStart = now > when.getTime() - 6 * 3600e3;
@@ -131,6 +123,14 @@
     if (!photos.length && !isDraft) drop('photos');
     if (!(afterStart && (guest || ev.demo)) || isDraft || isPreview) drop('gallery');
     if (now > end.getTime()) drop('countdown');
+
+    // programme
+    const tl = $('timeline');
+    if (tl) (ev.timeline || []).forEach(([t, what], k) => {
+      const li = document.createElement('li'); li.className = 'rv'; li.style.setProperty('--i', k + 1);
+      li.innerHTML = '<time></time><span></span>'; li.querySelector('time').textContent = String(t).toUpperCase(); li.querySelector('span').textContent = what;
+      tl.appendChild(li);
+    });
 
     // photos carousel
     if (frame.querySelector('[data-p="photos"]')) {
