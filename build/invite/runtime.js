@@ -42,15 +42,23 @@
       return { event: Object.assign(demoEvent(d.template || 'porcelain'), { demo: false, draft: true }, d) };
     }
     if (isDemo) return { event: demoEvent(slug.slice(5)) };
-    if (!slug) throw new Error('missing');
+    if (!slug) throw new Error('missing invitation link');
     const p = new URLSearchParams({ slug }); if (guestId) p.set('g', guestId); if (qs.has('preview')) p.set('preview', '1');
-    const r = await fetch('/api/event?' + p);
-    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || 'error');
+    let r;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try { r = await fetch('/api/event?' + p); break; }
+      catch { if (attempt === 1) throw new Error('The invitation server could not be reached. Please refresh and try again.'); }
+    }
+    if (!r.ok) {
+      const message = (await r.json().catch(() => ({}))).error;
+      if (r.status === 404) throw new Error('This invitation does not exist. Ask the hosts to send you a new link.');
+      throw new Error(message || 'The invitation could not be loaded. Please try again.');
+    }
     return r.json();
   }
 
   load().then(d => { const l = $('loader'); if (l) l.remove(); start(d); })
-    .catch(e => oops('We couldn’t find this invitation', 'Please check the link you were sent, or ask the hosts to send it to you again.'));
+    .catch(e => oops('We couldn’t open this invitation', e.message || 'Please check the link you were sent, or ask the hosts to send it to you again.'));
 
   function start({ event: ev, guest }){
     const T = window.THEMES[ev.template] || window.THEMES.porcelain;
