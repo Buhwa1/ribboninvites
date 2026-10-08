@@ -3,6 +3,13 @@ THEMES.emerald = (function(){
   const oct = (c,r) => { let d=''; for (let i=0;i<8;i++){ const a=(i*45+22.5)*Math.PI/180; d += (i?'L':'M') + (c+Math.cos(a)*r).toFixed(2) + ' ' + (c+Math.sin(a)*r).toFixed(2); } return d+'Z'; };
   return {
     openMs: 1300, goneMs: 2300,
+    // Emerald-only wording tweaks (called by runtime after fields are filled)
+    after: (frame) => {
+      const set = (sel, txt) => { const el = frame.querySelector(sel); if (el) el.textContent = txt; };
+      set('[data-p="names"] .lede', 'request the honor of your presence at their Holy Matrimony');
+      set('[data-p="venue"] .label', 'LOCATION');
+      set('[data-f="venueLabelA"]', 'HOLY MATRIMONY');
+    },
     art: {
       burst: () => { let s=''; for (let i=0;i<72;i++){ const a=i*5*Math.PI/180, r1=26, r2=i%2?62:96;
           s += `<line x1="${(Math.cos(a)*r1).toFixed(2)}" y1="${(Math.sin(a)*r1).toFixed(2)}" x2="${(Math.cos(a)*r2).toFixed(2)}" y2="${(Math.sin(a)*r2).toFixed(2)}" stroke="${G}" stroke-width="${i%2?.25:.35}"/>`; }

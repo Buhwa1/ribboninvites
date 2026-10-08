@@ -45,3 +45,6 @@
 .gate-text .tap{font-family:var(--body);font-style:italic;font-size:min(4.3cqw,2.3cqh);color:var(--ink-soft);margin-top:1.6cqh}
 .opening .gate-text{opacity:0}
 .gate-top{position:absolute;left:0;right:0;top:11cqh;text-align:center;font-family:var(--display);font-size:min(6cqw,3.2cqh);letter-spacing:.14em;color:var(--accent)}
+.gate-line{position:absolute;left:0;right:0;top:12cqh;padding:0 15cqw;text-align:center;font-family:var(--body);font-style:italic;font-size:min(6.2cqw,3.3cqh);line-height:1.35;color:var(--ink);text-wrap:balance;transition:opacity .4s}
+.opening .gate-line{opacity:0}
+.gate-text .tap{margin-top:0;font-size:min(4.6cqw,2.5cqh)}

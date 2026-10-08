@@ -338,6 +338,9 @@ body.t-emerald .gate-text .who{font-family:var(--body);font-style:italic;font-si
 body.t-emerald .gate-text .tap{font-family:var(--body);font-style:italic;font-size:min(4.3cqw,2.3cqh);color:var(--ink-soft);margin-top:1.6cqh}
 body.t-emerald .opening .gate-text{opacity:0}
 body.t-emerald .gate-top{position:absolute;left:0;right:0;top:11cqh;text-align:center;font-family:var(--display);font-size:min(6cqw,3.2cqh);letter-spacing:.14em;color:var(--accent)}
+body.t-emerald .gate-line{position:absolute;left:0;right:0;top:12cqh;padding:0 15cqw;text-align:center;font-family:var(--body);font-style:italic;font-size:min(6.2cqw,3.3cqh);line-height:1.35;color:var(--ink);text-wrap:balance;transition:opacity .4s}
+body.t-emerald .opening .gate-line{opacity:0}
+body.t-emerald .gate-text .tap{margin-top:0;font-size:min(4.6cqw,2.5cqh)}
 body.t-vellum{
   --outer:#E4E0D8; --ink:#1D1C1A; --ink-soft:#6E6A62; --accent:#9C8763; --line:rgba(29,28,26,.2);
   --hi:rgba(255,255,255,.9); --lo:rgba(0,0,0,.12);
@@ -472,7 +475,7 @@ body.t-royal .opening .plaque{opacity:0}
     </section>
 
     <section class="page" data-p="date" aria-label="Date">
-      <p class="rv label" style="--i:0">SAVE THE DATE</p>
+      <!-- <p class="rv label" style="--i:0">SAVE THE DATE</p> -->
       <div class="rv cart date-big" style="--i:1" data-cart="160x205"><div><div class="dd" data-f="day"></div><div class="mm" data-f="month"></div><div class="gem"></div><div class="yy" data-f="year"></div></div></div>
       <div class="rv pair" style="--i:2">
         <div class="cart" data-cart="120x62"><div data-f="weekday"></div></div>
@@ -605,7 +608,7 @@ body.t-royal .opening .plaque{opacity:0}
       </svg>
     </button>
     <div class="gate-text">
-      <div class="for">AN INVITATION FOR</div>
+      <div class="for">AN INVITATION FOR1</div>
       <div class="who" data-f="guest"></div>
       <div class="tap">Tap the seal to open</div>
     </div>
@@ -636,13 +639,11 @@ body.t-royal .opening .plaque{opacity:0}
 <template id="gate-emerald">
   <div class="gate" id="gate">
     <svg class="burst" viewBox="-100 -100 200 200" aria-hidden="true" data-art="burst"></svg>
-    <div class="gate-top" data-f="couple"></div>
+    <div class="gate-line">A lifetime of love and a day we would love to share with you</div>
     <div class="rib h l"></div><div class="rib h r"></div><div class="tail a"></div><div class="tail b"></div>
     <button class="seal" id="seal" type="button" aria-label="Open the invitation"><svg viewBox="0 0 100 100" aria-hidden="true" data-art="octo"></svg></button>
     <div class="gate-text">
-      <div class="for">AN INVITATION FOR</div>
-      <div class="who" data-f="guest"></div>
-      <div class="tap">Tap the seal to untie the ribbon</div>
+      <div class="tap">Tap the seal to continue</div>
     </div>
   </div>
 </template>
@@ -757,6 +758,13 @@ THEMES.emerald = (function(){
   const oct = (c,r) => { let d=''; for (let i=0;i<8;i++){ const a=(i*45+22.5)*Math.PI/180; d += (i?'L':'M') + (c+Math.cos(a)*r).toFixed(2) + ' ' + (c+Math.sin(a)*r).toFixed(2); } return d+'Z'; };
   return {
     openMs: 1300, goneMs: 2300,
+    // Emerald-only wording tweaks (called by runtime after fields are filled)
+    after: (frame) => {
+      const set = (sel, txt) => { const el = frame.querySelector(sel); if (el) el.textContent = txt; };
+      set('[data-p="names"] .lede', 'request the honor of your presence at their Holy Matrimony');
+      set('[data-p="venue"] .label', 'LOCATION');
+      set('[data-f="venueLabelA"]', 'HOLY MATRIMONY');
+    },
     art: {
       burst: () => { let s=''; for (let i=0;i<72;i++){ const a=i*5*Math.PI/180, r1=26, r2=i%2?62:96;
           s += `<line x1="${(Math.cos(a)*r1).toFixed(2)}" y1="${(Math.sin(a)*r1).toFixed(2)}" x2="${(Math.cos(a)*r2).toFixed(2)}" y2="${(Math.sin(a)*r2).toFixed(2)}" stroke="${G}" stroke-width="${i%2?.25:.35}"/>`; }
@@ -899,6 +907,7 @@ THEMES.royal = (function(){
     };
     frame.querySelectorAll('[data-f]').forEach(el => { el.textContent = F[el.dataset.f] ?? ''; });
     frame.querySelectorAll('[data-art]').forEach(el => { const fn = T.art && T.art[el.dataset.art]; if (fn) el.innerHTML = fn(ev); });
+    if (T.after) T.after(frame, ev, F);
 
     if (!F.famA && !F.famB) frame.querySelector('.fam-wrap').remove();
     if (!ev.rsvpBy) $('rsvpLabel').textContent = 'KINDLY REPLY';

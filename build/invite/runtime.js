@@ -94,6 +94,7 @@
     };
     frame.querySelectorAll('[data-f]').forEach(el => { el.textContent = F[el.dataset.f] ?? ''; });
     frame.querySelectorAll('[data-art]').forEach(el => { const fn = T.art && T.art[el.dataset.art]; if (fn) el.innerHTML = fn(ev); });
+    if (T.after) T.after(frame, ev, F);
 
     if (!F.famA && !F.famB) frame.querySelector('.fam-wrap').remove();
     if (!ev.rsvpBy) $('rsvpLabel').textContent = 'KINDLY REPLY';
