@@ -459,12 +459,14 @@ body.t-royal .opening .plaque{opacity:0}
 
     <section class="page" data-p="names" aria-label="The couple">
       <p class="rv lede guest-greeting" style="--i:0">Dear <span data-f="guest"></span>,</p>
-      <p class="rv label" style="--i:1" data-f="kicker"></p>
       <div class="rv rule" style="--i:2"><i></i></div>
       <h1 class="rv name" style="--i:3" data-f="a"></h1>
       <p class="rv and" style="--i:4">and</p>
       <h1 class="rv name" style="--i:5" data-f="b"></h1>
+
       <div class="rv rule" style="--i:6"><i></i></div>
+      <p class="rv label" style="--i:1" data-f="kicker"></p>
+
       <p class="rv lede names-lede" style="--i:7" data-f="lede"></p>
     </section>
 
@@ -549,8 +551,8 @@ body.t-royal .opening .plaque{opacity:0}
           <input class="field" id="fPhone" type="tel" autocomplete="tel" placeholder="Phone number (optional)" aria-label="Phone number">
         </div>
         <div class="choice" role="group" aria-label="Your reply">
-          <button type="button" class="pill" data-s="yes" aria-pressed="false">Joyfully accept</button>
-          <button type="button" class="pill" data-s="no" aria-pressed="false">Regretfully decline</button>
+          <button type="button" class="pill" data-s="yes" aria-pressed="false">Accept</button>
+          <button type="button" class="pill" data-s="no" aria-pressed="false">Apologies</button>
         </div>
         <div class="counter" id="counter" hidden><span>Attending</span><span class="ctl"><button type="button" id="cMinus" aria-label="Fewer">−</button><b id="cVal">1</b><button type="button" id="cPlus" aria-label="More">+</button></span></div>
         <textarea class="field" id="fNote" maxlength="500" placeholder="A note for the couple (optional)" aria-label="A note for the couple"></textarea>
@@ -766,7 +768,7 @@ THEMES.emerald = (function(){
     // Emerald-only wording tweaks (called by runtime after fields are filled)
     after: (frame) => {
       const set = (sel, txt) => { const el = frame.querySelector(sel); if (el) el.textContent = txt; };
-      set('[data-p="names"] .names-lede', 'request the honor of your presence at their Holy Matrimony');
+      set('[data-p="names"] .names-lede', 'request the honor of your presence at their Holy Matrimony and Marriage Celebration');
       set('[data-p="venue"] .label', 'LOCATION');
       set('[data-f="venueLabelA"]', 'HOLY MATRIMONY');
     },
