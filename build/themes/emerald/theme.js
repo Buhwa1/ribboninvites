@@ -6,7 +6,7 @@ THEMES.emerald = (function(){
     // Emerald-only wording tweaks (called by runtime after fields are filled)
     after: (frame) => {
       const set = (sel, txt) => { const el = frame.querySelector(sel); if (el) el.textContent = txt; };
-      set('[data-p="names"] .lede', 'request the honor of your presence at their Holy Matrimony');
+      set('[data-p="names"] .names-lede', 'request the honor of your presence at their Holy Matrimony');
       set('[data-p="venue"] .label', 'LOCATION');
       set('[data-f="venueLabelA"]', 'HOLY MATRIMONY');
     },

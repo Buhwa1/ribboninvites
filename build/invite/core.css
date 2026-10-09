@@ -22,6 +22,7 @@ button{font:inherit;color:inherit}
 @keyframes rv{to{opacity:1;transform:none;filter:none}}
 :where(.page p){margin:0}
 .label{font-family:var(--body);font-size:min(3.05cqw,1.65cqh);letter-spacing:.24em;text-indent:.24em;line-height:1.5;color:var(--ink-soft)}
+.guest-greeting{width:100%;max-width:100%;min-width:0;overflow-wrap:anywhere;line-height:1.35}
 .rule{display:flex;align-items:center;gap:2.5cqw;margin:2.2cqh 0}
 .rule::before,.rule::after{content:"";width:13cqw;height:1px;background:var(--accent);opacity:.7}
 .rule i{width:1.6cqw;height:1.6cqw;min-width:6px;min-height:6px;background:var(--accent);transform:rotate(45deg)}

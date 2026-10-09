@@ -97,7 +97,18 @@
     if (T.after) T.after(frame, ev, F);
 
     if (!F.famA && !F.famB) frame.querySelector('.fam-wrap').remove();
-    if (!ev.rsvpBy) $('rsvpLabel').textContent = 'KINDLY REPLY';
+    if (!ev.rsvpBy && tName !== 'emerald') $('rsvpLabel').textContent = 'KINDLY REPLY';
+    if (tName === 'emerald') {
+      frame.querySelector('[data-p="invite"]')?.remove();
+      $('rsvpLead').textContent = ev.hostPhone ? 'KINDLY RSVP TO' : 'KINDLY RSVP';
+      $('rsvpByLead').hidden = !ev.rsvpBy;
+      $('rsvpDeadline').hidden = !ev.rsvpBy;
+      if (ev.hostPhone) {
+        $('rsvpPhone').textContent = ev.hostPhone;
+        $('rsvpPhone').href = 'tel:' + ev.hostPhone.replace(/[^\d+]/g, '');
+        $('rsvpPhone').hidden = false;
+      }
+    }
 
     // cartouches
     const box = (w, h, o, c) => `M${o+c} ${o} H${w-o-c} A${c} ${c} 0 0 0 ${w-o} ${o+c} V${h-o-c} A${c} ${c} 0 0 0 ${w-o-c} ${h-o} H${o+c} A${c} ${c} 0 0 0 ${o} ${h-o-c} V${o+c} A${c} ${c} 0 0 0 ${o+c} ${o}Z`;

@@ -11,6 +11,9 @@
 }
 .frame,.gate{background:url("__VELVET__"),var(--velvet)}
 .label{color:var(--accent);opacity:.9}
+.guest-greeting{overflow-wrap:anywhere}
+.rsvp-phone{color:#F3EBDD;text-decoration:underline;text-underline-offset:.18em;overflow-wrap:anywhere}
+.rsvp-deadline{color:#D4AF6A}
 .date-big .dd{font-size:min(18cqw,10cqh)}
 .days{font-size:min(24cqw,13cqh)}
 .mono{display:none}

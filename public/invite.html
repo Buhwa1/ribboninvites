@@ -43,6 +43,7 @@ button{font:inherit;color:inherit}
 @keyframes rv{to{opacity:1;transform:none;filter:none}}
 :where(.page p){margin:0}
 .label{font-family:var(--body);font-size:min(3.05cqw,1.65cqh);letter-spacing:.24em;text-indent:.24em;line-height:1.5;color:var(--ink-soft)}
+.guest-greeting{width:100%;max-width:100%;min-width:0;overflow-wrap:anywhere;line-height:1.35}
 .rule{display:flex;align-items:center;gap:2.5cqw;margin:2.2cqh 0}
 .rule::before,.rule::after{content:"";width:13cqw;height:1px;background:var(--accent);opacity:.7}
 .rule i{width:1.6cqw;height:1.6cqw;min-width:6px;min-height:6px;background:var(--accent);transform:rotate(45deg)}
@@ -299,6 +300,9 @@ body.t-emerald{
 }
 body.t-emerald .frame,body.t-emerald .gate{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .9 0 0 0 0 .95 0 0 0 0 .9 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url%28%23n%29'/%3E%3C/svg%3E"),var(--velvet)}
 body.t-emerald .label{color:var(--accent);opacity:.9}
+body.t-emerald .guest-greeting{overflow-wrap:anywhere}
+body.t-emerald .rsvp-phone{color:#F3EBDD;text-decoration:underline;text-underline-offset:.18em;overflow-wrap:anywhere}
+body.t-emerald .rsvp-deadline{color:#D4AF6A}
 body.t-emerald .date-big .dd{font-size:min(18cqw,10cqh)}
 body.t-emerald .days{font-size:min(24cqw,13cqh)}
 body.t-emerald .mono{display:none}
@@ -454,13 +458,14 @@ body.t-royal .opening .plaque{opacity:0}
     <button class="music paused" id="music" type="button" aria-label="Play music" hidden><svg class="note" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><span class="bars"><i></i><i></i><i></i></span></button>
 
     <section class="page" data-p="names" aria-label="The couple">
-      <p class="rv label" style="--i:0" data-f="kicker"></p>
-      <div class="rv rule" style="--i:1"><i></i></div>
-      <h1 class="rv name" style="--i:2" data-f="a"></h1>
-      <p class="rv and" style="--i:3">and</p>
-      <h1 class="rv name" style="--i:4" data-f="b"></h1>
-      <div class="rv rule" style="--i:5"><i></i></div>
-      <p class="rv lede" style="--i:6" data-f="lede"></p>
+      <p class="rv lede guest-greeting" style="--i:0">Dear <span data-f="guest"></span>,</p>
+      <p class="rv label" style="--i:1" data-f="kicker"></p>
+      <div class="rv rule" style="--i:2"><i></i></div>
+      <h1 class="rv name" style="--i:3" data-f="a"></h1>
+      <p class="rv and" style="--i:4">and</p>
+      <h1 class="rv name" style="--i:5" data-f="b"></h1>
+      <div class="rv rule" style="--i:6"><i></i></div>
+      <p class="rv lede names-lede" style="--i:7" data-f="lede"></p>
     </section>
 
     <section class="page" data-p="invite" aria-label="Invitation">
@@ -535,7 +540,7 @@ body.t-royal .opening .plaque{opacity:0}
     </section> -->
 
     <section class="page" data-p="rsvp" aria-label="Reply">
-      <p class="rv label" style="--i:0" id="rsvpLabel">KINDLY REPLY BY <span data-f="rsvpBy"></span></p>
+      <p class="rv label" style="--i:0" id="rsvpLabel"><span id="rsvpLead">KINDLY REPLY</span><a class="rsvp-phone" id="rsvpPhone" hidden></a><span id="rsvpByLead"> BY </span><span class="rsvp-deadline" id="rsvpDeadline" data-f="rsvpBy"></span></p>
       <div class="rv rule" style="--i:1"><i></i></div>
       <p class="rv ask" style="--i:2" id="ask">Will you join us?</p>
       <form class="rv rsvp" style="--i:3" id="rsvpForm" novalidate>
@@ -761,7 +766,7 @@ THEMES.emerald = (function(){
     // Emerald-only wording tweaks (called by runtime after fields are filled)
     after: (frame) => {
       const set = (sel, txt) => { const el = frame.querySelector(sel); if (el) el.textContent = txt; };
-      set('[data-p="names"] .lede', 'request the honor of your presence at their Holy Matrimony');
+      set('[data-p="names"] .names-lede', 'request the honor of your presence at their Holy Matrimony');
       set('[data-p="venue"] .label', 'LOCATION');
       set('[data-f="venueLabelA"]', 'HOLY MATRIMONY');
     },
@@ -779,7 +784,6 @@ THEMES.emerald = (function(){
     }
   };
 })();
-
 THEMES.vellum = { openMs: 1300, goneMs: 2000, art: {} };
 
 THEMES.royal = (function(){
@@ -910,7 +914,18 @@ THEMES.royal = (function(){
     if (T.after) T.after(frame, ev, F);
 
     if (!F.famA && !F.famB) frame.querySelector('.fam-wrap').remove();
-    if (!ev.rsvpBy) $('rsvpLabel').textContent = 'KINDLY REPLY';
+    if (!ev.rsvpBy && tName !== 'emerald') $('rsvpLabel').textContent = 'KINDLY REPLY';
+    if (tName === 'emerald') {
+      frame.querySelector('[data-p="invite"]')?.remove();
+      $('rsvpLead').textContent = ev.hostPhone ? 'KINDLY RSVP TO' : 'KINDLY RSVP';
+      $('rsvpByLead').hidden = !ev.rsvpBy;
+      $('rsvpDeadline').hidden = !ev.rsvpBy;
+      if (ev.hostPhone) {
+        $('rsvpPhone').textContent = ev.hostPhone;
+        $('rsvpPhone').href = 'tel:' + ev.hostPhone.replace(/[^\d+]/g, '');
+        $('rsvpPhone').hidden = false;
+      }
+    }
 
     // cartouches
     const box = (w, h, o, c) => `M${o+c} ${o} H${w-o-c} A${c} ${c} 0 0 0 ${w-o} ${o+c} V${h-o-c} A${c} ${c} 0 0 0 ${w-o-c} ${h-o} H${o+c} A${c} ${c} 0 0 0 ${o} ${h-o-c} V${o+c} A${c} ${c} 0 0 0 ${o+c} ${o}Z`;
@@ -1109,7 +1124,6 @@ THEMES.royal = (function(){
     });
   }
 })();
-
 </script>
 </body>
 </html>
