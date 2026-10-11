@@ -159,5 +159,9 @@ body{min-height:100vh}
   load(); setInterval(() => { if (!document.hidden) load(); }, 20000);
 })();
 </script>
+<script type="module">
+  import { injectSpeedInsights } from '/vendor/speed-insights/index.mjs';
+  injectSpeedInsights();
+</script>
 </body>
 </html>
