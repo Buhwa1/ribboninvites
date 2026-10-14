@@ -91,7 +91,6 @@ button{font:inherit;color:inherit}
 .gate{position:absolute;inset:0;z-index:5}
 .gone{display:none !important}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;transition-delay:0s !important}}
-/* ---------- additions: app features ---------- */
 html,body{background:#111}
 [hidden]{display:none !important}
 .who{display:grid;gap:1.2cqh}
@@ -122,10 +121,21 @@ textarea.field{resize:none;height:8cqh;line-height:1.35}
 .send[disabled]{opacity:.55}
 .err{min-height:1.2em;font-size:min(3.6cqw,1.9cqh);color:#B3261E;font-style:italic}
 .done{display:grid;gap:1.6cqh;justify-items:center;margin-top:2.4cqh}
+.done .wa-rsvp-note{font-size:min(3.8cqw,2cqh);color:var(--ink-soft);max-width:56cqw;line-height:1.45}
+.wa-rsvp-actions{display:grid;gap:1.1cqh;width:min(62cqw,100%);margin-top:.4cqh}
+.wa-rsvp-actions a{justify-content:center;overflow-wrap:anywhere}
+.wa-rsvp-actions a.pill{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35cqh;padding:1.35cqh 3.2cqw;line-height:1.25;text-align:center}
+.wa-rsvp-actions .wa-name{font-weight:500;font-size:min(4cqw,2.15cqh)}
+.wa-rsvp-actions .wa-phone{font-size:min(3.3cqw,1.8cqh);opacity:.78;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.rsvp-contacts{display:flex;flex-direction:column;align-items:center;gap:.55em;margin-top:.9cqh;width:100%}
+.rsvp-contact-row{display:flex;justify-content:center;align-items:flex-start;gap:3cqw;width:100%}
+.rsvp-contact-row.paired .rsvp-contact{width:48%}
+.rsvp-contact{display:inline-flex;flex-direction:column;align-items:center;gap:.15em;text-decoration:none;color:var(--ink);overflow-wrap:anywhere;line-height:1.25}
+.rsvp-contact .rc-name{font-size:min(3.9cqw,2.05cqh);letter-spacing:.04em;font-weight:500}
+.rsvp-contact .rc-phone{font-size:min(3.4cqw,1.85cqh);color:var(--ink-soft);letter-spacing:.02em;font-variant-numeric:tabular-nums}
 .done p{font-style:italic;font-size:min(4.8cqw,2.5cqh);line-height:1.45}
 .host{margin-top:2cqh;font-size:min(3.8cqw,2cqh);color:var(--ink-soft)}
 .host a{color:inherit}
-/* photos */
 .slides{position:relative;width:min(62cqw,34cqh);aspect-ratio:4/5;margin-top:2cqh;border-radius:50% 50% 3cqw 3cqw / 30% 30% 3cqw 3cqw;overflow:hidden;
   box-shadow:0 0 0 1.6cqw var(--map-ring),0 0 0 calc(1.6cqw + 1px) var(--line),1px 3px 10px var(--lo);background:var(--map-bg)}
 .slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
@@ -134,12 +144,10 @@ textarea.field{resize:none;height:8cqh;line-height:1.35}
 .sdots button{width:2cqw;height:2cqw;min-width:7px;min-height:7px;border-radius:50%;border:1px solid var(--accent);background:transparent;padding:0;cursor:pointer}
 .sdots button[aria-current="true"]{background:var(--accent)}
 .ph-empty{display:grid;place-items:center;height:100%;color:var(--ink-soft);font-style:italic;font-size:min(4cqw,2.1cqh);padding:4cqw;text-align:center}
-/* gallery (after the event) */
 .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqw;width:100%;margin-top:2.4cqh;max-height:30cqh;overflow:auto}
 .gal img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:1.2cqw;display:block}
 .upl{position:relative;overflow:hidden}
 .upl input{position:absolute;inset:0;opacity:0;cursor:pointer}
-/* entry pass */
 .pass{position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:rgba(10,8,8,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:6cqw}
 .pass[hidden]{display:none}
 .pass-card{width:100%;max-width:340px;background:#FFFDF9;color:#1F1A17;border-radius:18px;padding:26px 22px 22px;text-align:center;font-family:var(--body);box-shadow:0 20px 50px rgba(0,0,0,.45)}
@@ -148,7 +156,7 @@ textarea.field{resize:none;height:8cqh;line-height:1.35}
 .pass-card .sub{font-size:14px;color:#6E655E}
 .pass-card .qr{width:200px;height:200px;margin:18px auto 12px;padding:10px;background:#fff;border-radius:12px;box-shadow:inset 0 0 0 1px #EAE3DC}
 .pass-card .qr svg{width:100%;height:100%;display:block}
-.pass-card .adm{display:inline-block;font:600 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-radius:999px;background:#F3EDE6}
+/* .pass-card .adm{display:inline-block;font:600 12px/1 system-ui,sans-serif;letter-spacing:.12em;padding:8px 12px;border-radius:999px;background:#F3EDE6} */
 .pass-card .tip{font-size:13px;color:#6E655E;margin:12px 0 16px;line-height:1.4}
 .pass-card button{font:500 15px/1 system-ui,sans-serif;padding:12px 22px;border-radius:999px;border:1px solid #D9D0C7;background:#fff;color:#1F1A17;cursor:pointer}
 .oops{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:10cqw;background:#F7F1EB;color:#2B2124;font-family:Georgia,serif}
@@ -160,7 +168,6 @@ textarea.field{resize:none;height:8cqh;line-height:1.35}
 .toast.on{opacity:1}
 .page{overflow-y:auto;justify-content:safe center;scrollbar-width:none}
 .page::-webkit-scrollbar{display:none}
-
 .loader{position:absolute;inset:0;display:grid;place-items:center;background:#F7F1EB;z-index:50}
 .loader img{width:64px;height:64px;animation:breathe-l 1.6s ease-in-out infinite}
 @keyframes breathe-l{0%,100%{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1)}}

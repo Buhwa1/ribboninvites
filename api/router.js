@@ -9,7 +9,7 @@ import { storageMode } from '../lib/store.js';
 const TEMPLATES = ['porcelain', 'lubugo', 'emerald', 'vellum', 'royal'];
 const TYPES = ['wedding', 'introduction', 'celebration'];
 const EDITABLE = ['template', 'type', 'a', 'b', 'famA', 'famB', 'date', 'endDate', 'venueA', 'mapA', 'venueB', 'mapB',
-  'timeline', 'dress', 'verse', 'kicker', 'inviteLine', 'rsvpBy', 'hostPhone', 'messages', 'openRsvp'];
+  'timeline', 'dress', 'verse', 'kicker', 'inviteLine', 'rsvpBy', 'hostPhone', 'rsvpPhones', 'rsvpContacts', 'rsvpMessage', 'messages', 'openRsvp'];
 
 const ownerKey = () => process.env.OWNER_KEY || (process.env.VERCEL ? null : 'owner-dev-key');
 const isOwner = k => !!k && k === ownerKey();
@@ -21,6 +21,26 @@ function clean(input, ev = {}) {
   for (const f of ['a', 'b', 'famA', 'famB', 'venueA', 'venueB', 'dress', 'kicker', 'hostPhone']) if (f in out) out[f] = str(out[f]);
   for (const f of ['mapA', 'mapB']) if (f in out) out[f] = str(out[f], 600);
   for (const f of ['verse', 'inviteLine']) if (f in out) out[f] = str(out[f], 400);
+  if ('rsvpContacts' in out) {
+    const contacts = Array.isArray(out.rsvpContacts) ? out.rsvpContacts : [];
+    const seen = new Set();
+    out.rsvpContacts = contacts.map(c => {
+      const name = str(c?.name, 80);
+      let phone = String(c?.phone || '').replace(/\D/g, '');
+      if (/^0\d{9}$/.test(phone)) phone = '256' + phone.slice(1);
+      return { name, phone };
+    }).filter(c => {
+      if (!c.name || c.phone.length < 7 || c.phone.length > 15 || seen.has(c.phone)) return false;
+      seen.add(c.phone);
+      return true;
+    }).slice(0, 5);
+  }
+  if ('rsvpPhones' in out) {
+    const phones = Array.isArray(out.rsvpPhones) ? out.rsvpPhones : [];
+    out.rsvpPhones = [...new Set(phones.map(v => String(v || '').replace(/\D/g, '')).map(p => /^0\d{9}$/.test(p) ? '256' + p.slice(1) : p)
+      .filter(p => p.length >= 7 && p.length <= 15))].slice(0, 5);
+  }
+  if ('rsvpMessage' in out) out.rsvpMessage = str(out.rsvpMessage, 1000);
   if ('template' in out && !TEMPLATES.includes(out.template)) out.template = 'porcelain';
   if ('type' in out && !TYPES.includes(out.type)) out.type = 'wedding';
   if ('timeline' in out) out.timeline = Array.isArray(out.timeline) ? out.timeline.slice(0, 10).map(r => [str(r[0], 30), str(r[1], 60)]).filter(r => r[0] || r[1]) : [];

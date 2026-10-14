@@ -144,6 +144,8 @@
         <div class="field"><label class="lbl" for="rsvpBy">Reply by <span class="opt">Optional</span></label><input class="input" id="rsvpBy" type="date"></div>
         <div class="field"><label class="lbl" for="hostPhone">WhatsApp for guest questions <span class="opt">Optional</span></label><input class="input" id="hostPhone" type="tel" inputmode="tel" placeholder="e.g. 0772 123 456"></div>
       </div>
+      <div class="field"><label class="lbl" for="rsvpContacts">RSVP contacts <span class="opt">Optional · up to 5</span></label><textarea class="textarea" id="rsvpContacts" rows="3" placeholder="Aunt Jane | 0772 123 456&#10;Uncle Peter | +256 701 234 567"></textarea><p class="hint">One contact per line, as Name | WhatsApp number. Names and numbers appear on the invitation and on each send button.</p></div>
+      <div class="field"><label class="lbl" for="rsvpMessage">WhatsApp reply message <span class="opt">Optional</span></label><textarea class="textarea" id="rsvpMessage" maxlength="1000" placeholder="RSVP from *{name}* to *{couple}* wedding&#10;Reply: *{reply}*&#10;Date: *{date}*&#10;&#10;Note: *{note}*"></textarea><p class="hint">Use {name}, {recipient}, {couple}, {reply}, {count}, {note}, {date}, {venue}, and {link}. Leave blank to use the default.</p></div>
       <label class="check"><input type="checkbox" id="openRsvp"><div><b>Allow replies from a general link</b><span>Handy for sharing in a family WhatsApp group. Guests type their own name, and each reply counts toward your guest limit.</span></div></label>
     </div></section>
 
@@ -223,12 +225,19 @@
   $('#prog').addEventListener('click', e => { const d = e.target.closest('[data-del]'); if (d) { state.timeline.splice(+d.dataset.del, 1); drawProg(); refresh(); } });
   $('#addRow').onclick = () => { if (state.timeline.length >= 10) return UI.toast('You can add up to 10 lines.', { error: true }); state.timeline.push(['', '']); drawProg(); $('#prog').lastElementChild.querySelector('input').focus(); };
 
-  const F = ['a', 'b', 'famA', 'famB', 'venueA', 'mapA', 'venueB', 'mapB', 'dress', 'kicker', 'inviteLine', 'verse', 'rsvpBy', 'hostPhone'];
+  const F = ['a', 'b', 'famA', 'famB', 'venueA', 'mapA', 'venueB', 'mapB', 'dress', 'kicker', 'inviteLine', 'verse', 'rsvpBy', 'hostPhone', 'rsvpMessage'];
   function build() {
     const v = id => $('#' + id).value.trim();
     const ev = { template: state.template, type: state.type, timeline: state.timeline.filter(r => r[0].trim() || r[1].trim()), openRsvp: $('#openRsvp').checked };
     F.forEach(f => ev[f] = v(f));
     ev.hostPhone = UI.phoneDigits(ev.hostPhone);
+    ev.rsvpContacts = v('rsvpContacts').split(/\r?\n/).map(line => {
+      const separator = line.lastIndexOf('|');
+      if (separator < 0) return null;
+      const name = line.slice(0, separator).trim().slice(0, 80);
+      const phone = UI.phoneDigits(line.slice(separator + 1));
+      return name && phone.length >= 7 && phone.length <= 15 ? { name, phone } : null;
+    }).filter(Boolean).slice(0, 5);
     for (const m of ['mapA', 'mapB']) if (ev[m] && !/^https?:\/\//i.test(ev[m])) ev[m] = /\./.test(ev[m]) && !/\s/.test(ev[m]) ? 'https://' + ev[m] : ev[m];
     const d = v('date');
     if (d) {
@@ -271,6 +280,8 @@
         const { event: ev } = await api(`event?slug=${encodeURIComponent(editSlug)}&preview=1`, { key: editKey });
         Object.assign(state, { template: tplOk(ev.template) ? ev.template : 'porcelain', type: ev.type || 'wedding', timeline: (ev.timeline || []).map(r => [r[0], r[1]]) });
         F.forEach(f => { if (ev[f] != null) $('#' + f).value = ev[f]; });
+        const contacts = ev.rsvpContacts || (ev.rsvpPhones || []).map((phone, i) => ({ name: `Host ${i + 1}`, phone }));
+        $('#rsvpContacts').value = contacts.map(c => `${c.name} | +${c.phone}`).join('\n');
         if (ev.hostPhone) $('#hostPhone').value = '+' + ev.hostPhone;
         $('#openRsvp').checked = !!ev.openRsvp;
         if (ev.date) { $('#date').value = ev.date.slice(0, 10); $('#start').value = ev.date.slice(11, 16); }

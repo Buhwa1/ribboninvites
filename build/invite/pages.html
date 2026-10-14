@@ -85,7 +85,7 @@
     </section> -->
 
     <section class="page" data-p="rsvp" aria-label="Reply">
-      <p class="rv label" style="--i:0" id="rsvpLabel"><span id="rsvpLead">KINDLY REPLY</span><a class="rsvp-phone" id="rsvpPhone" hidden></a><span id="rsvpByLead"> BY </span><span class="rsvp-deadline" id="rsvpDeadline" data-f="rsvpBy"></span></p>
+      <p class="rv label" style="--i:0" id="rsvpLabel"><span id="rsvpLead">KINDLY REPLY</span><span class="rsvp-contacts" id="rsvpContactList" hidden></span><span id="rsvpByLead"> BY </span><span class="rsvp-deadline" id="rsvpDeadline" data-f="rsvpBy"></span></p>
       <div class="rv rule" style="--i:1"><i></i></div>
       <p class="rv ask" style="--i:2" id="ask">Will you join us?</p>
       <form class="rv rsvp" style="--i:3" id="rsvpForm" novalidate>
@@ -104,6 +104,8 @@
       </form>
       <div class="done" id="rsvpDone" hidden>
         <p id="doneText"></p>
+        <p class="wa-rsvp-note" id="waRsvpNote" hidden>WhatsApp will open with your reply ready. Tap Send to deliver it.</p>
+        <div class="wa-rsvp-actions" id="waRsvpActions" hidden aria-label="Send your reply on WhatsApp"></div>
         <button type="button" class="pill send" id="passBtn" hidden>Show my entry pass</button>
         <button type="button" class="textlink" id="changeBtn">Change my reply</button>
       </div>
@@ -130,7 +132,7 @@
         <h3 id="passName"></h3>
         <div class="sub" id="passEvent"></div>
         <div class="qr" id="passQr"></div>
-        <span class="adm" id="passAdm"></span>
+        <!-- <span class="adm" id="passAdm"></span> -->
         <p class="tip">Show this at the entrance. A screenshot works too.</p>
         <button type="button" id="passClose">Done</button>
       </div>
