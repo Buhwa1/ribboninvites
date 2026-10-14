@@ -9,7 +9,7 @@ import { storageMode } from '../lib/store.js';
 const TEMPLATES = ['porcelain', 'lubugo', 'emerald', 'vellum', 'royal'];
 const TYPES = ['wedding', 'introduction', 'celebration'];
 const EDITABLE = ['template', 'type', 'a', 'b', 'famA', 'famB', 'date', 'endDate', 'venueA', 'mapA', 'venueB', 'mapB',
-  'timeline', 'dress', 'verse', 'kicker', 'inviteLine', 'rsvpBy', 'hostPhone', 'rsvpPhones', 'rsvpContacts', 'rsvpMessage', 'messages', 'openRsvp'];
+  'timeline', 'dress', 'verse', 'kicker', 'inviteLine', 'rsvpBy', 'hostPhone', 'replyPhone', 'rsvpPhones', 'rsvpContacts', 'rsvpMessage', 'messages', 'openRsvp'];
 
 const ownerKey = () => process.env.OWNER_KEY || (process.env.VERCEL ? null : 'owner-dev-key');
 const isOwner = k => !!k && k === ownerKey();
@@ -19,6 +19,14 @@ function clean(input, ev = {}) {
   for (const f of EDITABLE) if (f in input) out[f] = input[f];
   const str = (v, n = 200) => (typeof v === 'string' ? v.trim().slice(0, n) : '');
   for (const f of ['a', 'b', 'famA', 'famB', 'venueA', 'venueB', 'dress', 'kicker', 'hostPhone']) if (f in out) out[f] = str(out[f]);
+  if ('replyPhone' in out) {
+    const value = String(out.replyPhone || '').trim();
+    let phone = value.replace(/\D/g, '');
+    if (/^2560\d{9}$/.test(phone)) phone = '256' + phone.slice(4);
+    if (/^0\d{9}$/.test(phone)) phone = '256' + phone.slice(1);
+    if (value && (phone.length < 7 || phone.length > 15)) fail(400, 'Enter a valid WhatsApp reply number');
+    out.replyPhone = phone;
+  }
   for (const f of ['mapA', 'mapB']) if (f in out) out[f] = str(out[f], 600);
   for (const f of ['verse', 'inviteLine']) if (f in out) out[f] = str(out[f], 400);
   if ('rsvpContacts' in out) {

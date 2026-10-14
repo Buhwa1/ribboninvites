@@ -66,6 +66,12 @@
     const tName = window.THEMES[ev.template] ? ev.template : 'porcelain';
     const rsvpContacts = ev.rsvpContacts?.length ? ev.rsvpContacts
       : (ev.rsvpPhones || []).map((phone, i) => ({ name: `Host ${i + 1}`, phone }));
+    const configuredReplyDigits = String(ev.replyPhone || '').replace(/\D/g, '');
+    const fallbackReplyDigits = rsvpContacts.map(c => String(c.phone || '').replace(/\D/g, ''))
+      .find(digits => digits.length >= 7 && digits.length <= 15) || '';
+    const replyDestination = configuredReplyDigits.length >= 7 && configuredReplyDigits.length <= 15
+      ? configuredReplyDigits
+      : fallbackReplyDigits;
     document.body.className = 't-' + tName;
     const font = document.createElement('link'); font.rel = 'stylesheet';
     font.href = 'https://fonts.googleapis.com/css2?family=' + FONTS[tName] + '&display=swap'; document.head.appendChild(font);
@@ -126,6 +132,8 @@
         const link = document.createElement('a');
         link.className = 'rsvp-contact';
         link.dataset.rsvpContact = String(index);
+        link.target = '_blank';
+        link.rel = 'noopener';
         link.href = `https://wa.me/${digits}?text=${encodeURIComponent(`RSVP from ${guestName} about ${ev.a} & ${ev.b}'s`)}`;
         link.innerHTML = `<span class="rc-name">${contact.name || 'Host'}</span><span class="rc-phone">${formatPhone(digits)}</span>`;
         links.push(link);
@@ -249,29 +257,16 @@
       $('ask').textContent = me.status === 'yes' ? 'See you there' : 'With love';
       const actions = $('waRsvpActions');
       actions.replaceChildren();
-      const recipients = trial ? [] : rsvpContacts.filter(c => String(c.phone || '').replace(/\D/g, ''));
+      actions.hidden = true;
+      $('waRsvpNote').hidden = true;
+      const replyDigits = trial ? '' : replyDestination;
+      const replyRecipient = replyDigits.length >= 7 && replyDigits.length <= 15
+        ? { name: 'Host', phone: replyDigits }
+        : null;
       let firstUrl = null;
-      for (const recipient of recipients) {
-        const digits = String(recipient.phone || '').replace(/\D/g, '');
+      if (replyRecipient) {
         const reply = me.status === 'yes' ? 'Accept' : 'Apologies';
-        const url = `https://wa.me/${digits}?text=${encodeURIComponent(rsvpMessageFor(recipient, reply, me.count || 0, me.note || ''))}`;
-        if (!firstUrl) firstUrl = url;
-        const link = document.createElement('a');
-        link.className = 'pill'; link.target = '_blank'; link.rel = 'noopener';
-        link.href = url;
-        link.innerHTML = `<span class="wa-name">WhatsApp · ${recipient.name || 'Host'}</span><span class="wa-phone">${formatPhone(digits)}</span>`;
-        actions.appendChild(link);
-      }
-      actions.hidden = recipients.length === 0;
-      const note = $('waRsvpNote');
-      if (recipients.length === 0) {
-        note.hidden = true;
-      } else if (recipients.length === 1) {
-        note.hidden = false;
-        note.textContent = 'WhatsApp will open with your reply ready. Tap Send to deliver it.';
-      } else {
-        note.hidden = false;
-        note.textContent = 'WhatsApp opens with your reply ready. Message each contact below, then tap Send.';
+        firstUrl = `https://wa.me/${replyRecipient.phone}?text=${encodeURIComponent(rsvpMessageFor(replyRecipient, reply, me.count || 0, me.note || ''))}`;
       }
       if (opts.whatsappWindow && firstUrl) {
         opts.whatsappWindow.location.href = firstUrl;
@@ -293,8 +288,7 @@
       const body = { slug: ev.slug, status: choice, count, note: $('fNote').value };
       if (trial) {} else if (me) body.g = me.id; else { body.name = $('fName').value.trim(); body.phone = $('fPhone').value.trim(); if (!body.name) { err.textContent = 'Please enter your name.'; return; } }
       if (trial) { me = Object.assign(me || { name: guestName, seats: 2 }, { status: choice, count, note: $('fNote').value }); showDone({ openWhatsApp: true }); toast(isPreview ? 'Preview only. Replies from personal links are saved.' : 'This is a demo, so nothing was saved.'); if (choice === 'yes') setTimeout(openPass, 700); return; }
-      const hasRsvpContact = rsvpContacts.some(c => String(c.phone || '').replace(/\D/g, ''));
-      const whatsappWindow = hasRsvpContact ? window.open('about:blank', '_blank') : null;
+      const whatsappWindow = replyDestination ? window.open('about:blank', '_blank') : null;
       if (whatsappWindow) {
         whatsappWindow.document.title = 'Preparing your WhatsApp reply';
         whatsappWindow.document.body.textContent = 'Saving your reply…';
