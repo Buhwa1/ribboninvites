@@ -31,6 +31,7 @@ function clean(input, ev = {}) {
   for (const f of ['verse', 'inviteLine']) if (f in out) out[f] = str(out[f], 400);
   if ('rsvpContacts' in out) {
     const contacts = Array.isArray(out.rsvpContacts) ? out.rsvpContacts : [];
+    const allowUnnamed = (out.template || ev.template) === 'emerald';
     const seen = new Set();
     out.rsvpContacts = contacts.map(c => {
       const name = str(c?.name, 80);
@@ -38,7 +39,7 @@ function clean(input, ev = {}) {
       if (/^0\d{9}$/.test(phone)) phone = '256' + phone.slice(1);
       return { name, phone };
     }).filter(c => {
-      if (!c.name || c.phone.length < 7 || c.phone.length > 15 || seen.has(c.phone)) return false;
+      if ((!c.name && !allowUnnamed) || c.phone.length < 7 || c.phone.length > 15 || seen.has(c.phone)) return false;
       seen.add(c.phone);
       return true;
     }).slice(0, 5);
@@ -115,7 +116,12 @@ const routes = {
   async 'event:PUT'(req, q) {
     const ev = await loadEvent(q.slug); needAdmin(ev, q.k);
     const body = await readJson(req);
-    Object.assign(ev, clean(body.event || {}, ev));
+    const updates = clean(body.event || {}, ev);
+    if ('rsvpContacts' in updates) {
+      delete ev.rsvpPhones;
+      delete updates.rsvpPhones;
+    }
+    Object.assign(ev, updates);
     if (body.plan && PLANS[body.plan] && !ev.active) ev.plan = body.plan;
     await putEvent(ev);
     return { event: ev };

@@ -145,7 +145,7 @@
         <div class="field"><label class="lbl" for="rsvpBy">Reply by <span class="opt">Optional</span></label><input class="input" id="rsvpBy" type="date"></div>
         <div class="field"><label class="lbl" for="hostPhone">WhatsApp for guest questions <span class="opt">Optional</span></label><input class="input" id="hostPhone" type="tel" inputmode="tel" placeholder="e.g. 0772 123 456"></div>
       </div>
-      <div class="field"><label class="lbl" for="rsvpContacts">RSVP contacts <span class="opt">Optional · up to 5</span></label><textarea class="textarea" id="rsvpContacts" rows="3" placeholder="Aunt Jane | 0772 123 456&#10;Uncle Peter | +256 701 234 567"></textarea><p class="hint">One contact per line, as Name | WhatsApp number. These appear under “Kindly RSVP to” on the invitation.</p></div>
+      <div class="field"><label class="lbl" for="rsvpContacts">RSVP contacts <span class="opt">Optional · up to 5</span></label><textarea class="textarea" id="rsvpContacts" rows="3" placeholder="Aunt Jane | 0772 123 456&#10;Uncle Peter | +256 701 234 567&#10;Emerald also accepts a number by itself"></textarea><p class="hint">One contact per line. Use Name | WhatsApp number, or enter just a number for Emerald. These appear under the RSVP heading.</p></div>
       <div class="field"><label class="lbl" for="replyPhone">WhatsApp number to receive replies <span class="opt">Optional</span></label><input class="input" id="replyPhone" type="tel" inputmode="tel" placeholder="e.g. 0772 123 456"><p class="hint">Submitted RSVP messages open WhatsApp to this number. It is not shown on the invitation.</p></div>
       <div class="field"><label class="lbl" for="rsvpMessage">WhatsApp reply message <span class="opt">Optional</span></label><textarea class="textarea" id="rsvpMessage" maxlength="1000" placeholder="RSVP from *{name}* to *{couple}* wedding&#10;Reply: *{reply}*&#10;Date: *{date}*&#10;&#10;Note: *{note}*"></textarea><p class="hint">Use {name}, {recipient}, {couple}, {reply}, {count}, {note}, {date}, {venue}, and {link}. Leave blank to use the default.</p></div>
       <label class="check"><input type="checkbox" id="openRsvp"><div><b>Allow replies from a general link</b><span>Handy for sharing in a family WhatsApp group. Guests type their own name, and each reply counts toward your guest limit.</span></div></label>
@@ -236,11 +236,12 @@
     ev.replyPhone = UI.phoneDigits(ev.replyPhone);
     if (/^2560\d{9}$/.test(ev.replyPhone)) ev.replyPhone = '256' + ev.replyPhone.slice(4);
     ev.rsvpContacts = v('rsvpContacts').split(/\r?\n/).map(line => {
-      const separator = line.lastIndexOf('|');
-      if (separator < 0) return null;
-      const name = line.slice(0, separator).trim().slice(0, 80);
-      const phone = UI.phoneDigits(line.slice(separator + 1));
-      return name && phone.length >= 7 && phone.length <= 15 ? { name, phone } : null;
+      const value = line.trim();
+      const separator = value.lastIndexOf('|');
+      if (separator < 0 && state.template !== 'emerald') return null;
+      const name = separator < 0 ? '' : value.slice(0, separator).trim().slice(0, 80);
+      const phone = UI.phoneDigits(separator < 0 ? value : value.slice(separator + 1));
+      return (name || state.template === 'emerald') && phone.length >= 7 && phone.length <= 15 ? { name, phone } : null;
     }).filter(Boolean).slice(0, 5);
     for (const m of ['mapA', 'mapB']) if (ev[m] && !/^https?:\/\//i.test(ev[m])) ev[m] = /\./.test(ev[m]) && !/\s/.test(ev[m]) ? 'https://' + ev[m] : ev[m];
     const d = v('date');
@@ -284,8 +285,9 @@
         const { event: ev } = await api(`event?slug=${encodeURIComponent(editSlug)}&preview=1`, { key: editKey });
         Object.assign(state, { template: tplOk(ev.template) ? ev.template : 'porcelain', type: ev.type || 'wedding', timeline: (ev.timeline || []).map(r => [r[0], r[1]]) });
         F.forEach(f => { if (ev[f] != null) $('#' + f).value = ev[f]; });
-        const contacts = ev.rsvpContacts || (ev.rsvpPhones || []).map((phone, i) => ({ name: `Host ${i + 1}`, phone }));
-        $('#rsvpContacts').value = contacts.map(c => `${c.name} | +${c.phone}`).join('\n');
+        const contacts = ev.rsvpContacts?.length ? ev.rsvpContacts
+          : (ev.rsvpPhones || []).map((phone, i) => ({ name: state.template === 'emerald' ? '' : `Host ${i + 1}`, phone }));
+        $('#rsvpContacts').value = contacts.map(c => c.name ? `${c.name} | +${c.phone}` : `+${c.phone}`).join('\n');
         if (ev.hostPhone) $('#hostPhone').value = '+' + ev.hostPhone;
         if (ev.replyPhone) $('#replyPhone').value = '+' + ev.replyPhone;
         $('#openRsvp').checked = !!ev.openRsvp;

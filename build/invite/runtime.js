@@ -65,7 +65,7 @@
     const T = window.THEMES[ev.template] || window.THEMES.porcelain;
     const tName = window.THEMES[ev.template] ? ev.template : 'porcelain';
     const rsvpContacts = ev.rsvpContacts?.length ? ev.rsvpContacts
-      : (ev.rsvpPhones || []).map((phone, i) => ({ name: `Host ${i + 1}`, phone }));
+      : (ev.rsvpPhones || []).map((phone, i) => ({ name: tName === 'emerald' ? '' : `Host ${i + 1}`, phone }));
     const configuredReplyDigits = String(ev.replyPhone || '').replace(/\D/g, '');
     const fallbackReplyDigits = rsvpContacts.map(c => String(c.phone || '').replace(/\D/g, ''))
       .find(digits => digits.length >= 7 && digits.length <= 15) || '';
@@ -116,7 +116,7 @@
     if (!ev.rsvpBy && tName !== 'emerald') $('rsvpLabel').textContent = 'KINDLY REPLY';
     if (tName === 'emerald') {
       frame.querySelector('[data-p="invite"]')?.remove();
-      $('rsvpLead').textContent = rsvpContacts.length ? 'KINDLY RSVP TO' : 'KINDLY RSVP';
+      $('rsvpLead').textContent = 'RSVP';
       $('rsvpByLead').hidden = !ev.rsvpBy;
       $('rsvpDeadline').hidden = !ev.rsvpBy;
     } else if (rsvpContacts.length) {
@@ -135,7 +135,16 @@
         link.target = '_blank';
         link.rel = 'noopener';
         link.href = `https://wa.me/${digits}?text=${encodeURIComponent(`RSVP from ${guestName} about ${ev.a} & ${ev.b}'s`)}`;
-        link.innerHTML = `<span class="rc-name">${contact.name || 'Host'}</span><span class="rc-phone">${formatPhone(digits)}</span>`;
+        if (contact.name) {
+          const name = document.createElement('span');
+          name.className = 'rc-name';
+          name.textContent = contact.name;
+          link.appendChild(name);
+        }
+        const phone = document.createElement('span');
+        phone.className = 'rc-phone';
+        phone.textContent = formatPhone(digits);
+        link.appendChild(phone);
         links.push(link);
       }
       const perRow = links.length === 2 ? 1 : 2;
@@ -207,7 +216,7 @@
     if ($('cdD')) { tick(); setInterval(tick, 1000); }
 
     // host contact
-    if (ev.hostPhone) { $('hostLine').hidden = false; $('hostLink').href = 'https://wa.me/' + ev.hostPhone.replace(/\D/g, '') + '?text=' + encodeURIComponent(`Hello! A question about ${ev.a} & ${ev.b}’s invitation.`); }
+    if (ev.hostPhone && tName !== 'emerald') { $('hostLine').hidden = false; $('hostLink').href = 'https://wa.me/' + ev.hostPhone.replace(/\D/g, '') + '?text=' + encodeURIComponent(`Hello! A question about ${ev.a} & ${ev.b}’s invitation.`); }
 
     // status ribbon
     if (isPreview && !embed) frame.insertAdjacentHTML('beforeend', '<div class="badge">PREVIEW · REPLIES HERE ARE NOT SAVED</div>');
@@ -253,8 +262,10 @@
       $('doneText').textContent = me.status === 'yes'
         ? `Thank you${name}. We can’t wait to celebrate with you${me.count > 1 ? ` (${me.count} people)` : ''}.`
         : `Thank you for letting us know${name}. You’ll be dearly missed.`;
-      $('passBtn').hidden = me.status !== 'yes';
+      $('doneText').hidden = tName === 'emerald';
+      $('passBtn').hidden = tName === 'emerald' || me.status !== 'yes';
       $('ask').textContent = me.status === 'yes' ? 'See you there' : 'With love';
+      $('ask').hidden = tName === 'emerald';
       const actions = $('waRsvpActions');
       actions.replaceChildren();
       actions.hidden = true;
@@ -281,13 +292,13 @@
     } else if (!me && !trial) { $('whoFields').hidden = false; }
     if (me && me.status && me.status !== 'pending') { setChoice(me.status); setCount(me.count || 1); $('fNote').value = me.note || ''; showDone(); }
     else setCount(1);
-    $('changeBtn').onclick = () => { done.hidden = true; form.hidden = false; $('ask').textContent = 'Will you join us?'; };
+    $('changeBtn').onclick = () => { done.hidden = true; form.hidden = false; $('ask').hidden = false; $('doneText').hidden = false; $('ask').textContent = 'Will you join us?'; };
     form.addEventListener('submit', async e => {
       e.preventDefault(); const err = $('rsvpErr'); err.textContent = '';
       if (!choice) { err.textContent = 'Please choose accept or decline.'; return; }
       const body = { slug: ev.slug, status: choice, count, note: $('fNote').value };
       if (trial) {} else if (me) body.g = me.id; else { body.name = $('fName').value.trim(); body.phone = $('fPhone').value.trim(); if (!body.name) { err.textContent = 'Please enter your name.'; return; } }
-      if (trial) { me = Object.assign(me || { name: guestName, seats: 2 }, { status: choice, count, note: $('fNote').value }); showDone({ openWhatsApp: true }); toast(isPreview ? 'Preview only. Replies from personal links are saved.' : 'This is a demo, so nothing was saved.'); if (choice === 'yes') setTimeout(openPass, 700); return; }
+      if (trial) { me = Object.assign(me || { name: guestName, seats: 2 }, { status: choice, count, note: $('fNote').value }); showDone({ openWhatsApp: true }); toast(isPreview ? 'Preview only. Replies from personal links are saved.' : 'This is a demo, so nothing was saved.'); if (choice === 'yes' && tName !== 'emerald') setTimeout(openPass, 700); return; }
       const whatsappWindow = replyDestination ? window.open('about:blank', '_blank') : null;
       if (whatsappWindow) {
         whatsappWindow.document.title = 'Preparing your WhatsApp reply';
@@ -299,7 +310,7 @@
         const j = await r.json(); if (!r.ok) throw new Error(j.error || 'Could not send your reply');
         me = j.guest;
         if (!guestId) { guestId = me.id; const u = new URL(location.href); u.searchParams.set('g', me.id); history.replaceState(null, '', u); }
-        showDone({ whatsappWindow, openWhatsApp: true }); if (me.status === 'yes') openPass();
+        showDone({ whatsappWindow, openWhatsApp: true }); if (me.status === 'yes' && tName !== 'emerald') openPass();
       } catch (x) {
         if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.close();
         err.textContent = /fetch|network/i.test(x.message) ? 'No connection. Please check your internet and try again.' : x.message;
@@ -307,7 +318,7 @@
     });
 
     function openPass(){
-      if (!me || typeof qrcode !== 'function') return;
+      if (tName === 'emerald' || !me || typeof qrcode !== 'function') return;
       const q = qrcode(0, 'M'); q.addData(`INV:${ev.slug}:${me.id || 'sample'}`); q.make();
       $('passQr').innerHTML = q.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
       $('passName').textContent = me.name; $('passEvent').textContent = `${ev.a} & ${ev.b} · ${F.day} ${fmt({ month: 'short' })} ${F.year}`;
