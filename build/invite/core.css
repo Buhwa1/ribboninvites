@@ -79,6 +79,7 @@ button{font:inherit;color:inherit}
 .timeline li+li::before{content:"";width:1.5cqw;height:1.5cqw;min-width:6px;min-height:6px;background:var(--accent);transform:rotate(45deg);margin:1.5cqh 0}
 .dress{margin-top:3.2cqh;font-style:italic;font-size:min(4.6cqw,2.4cqh);color:var(--ink-soft);line-height:1.45}
 .ask{font-family:var(--display);font-weight:500;font-size:var(--ask-size,min(10cqw,5.4cqh));line-height:1.1}
+.attendance-note{margin-top:1.3cqh !important;font-size:min(3.25cqw,1.72cqh);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);line-height:1.35}
 .rsvp{display:grid;gap:1.8cqh;margin-top:3.4cqh;width:min(62cqw,100%)}
 .rsvp .pill{justify-content:center;padding:1.6cqh 4cqw;font-size:min(4.8cqw,2.5cqh)}
 .rsvp .pill.yes{background:var(--yes-bg);color:var(--yes-ink);border:0}
@@ -171,6 +172,8 @@ textarea.field{resize:none;height:8cqh;line-height:1.35}
 .loader{position:absolute;inset:0;display:grid;place-items:center;background:#F7F1EB;z-index:50}
 .loader img{width:64px;height:64px;animation:breathe-l 1.6s ease-in-out infinite}
 @keyframes breathe-l{0%,100%{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1)}}
-.credit{display:inline-block;margin-top:2.4cqh;font-family:system-ui,sans-serif;font-size:min(2.9cqw,1.5cqh);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);opacity:.9;text-decoration:underline;text-underline-offset:.3em;text-decoration-thickness:1px;transition:opacity .2s}
+.page[data-p="rsvp"]{bottom:5.7cqh;padding-bottom:4.4cqh}
+.credit{position:absolute;bottom:.4cqh;left:0;right:0;display:inline-block;font-family:system-ui,sans-serif;font-size:min(2.7cqw,1.4cqh);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);opacity:.72;text-decoration:none;transition:opacity .2s}
+.page[data-p="rsvp"] .credit{bottom:.45cqh;font-size:min(2.3cqw,1.22cqh);letter-spacing:.1em;opacity:.58}
 .credit:hover,.credit:focus-visible{opacity:1}
 .pass-card .sample{display:inline-block;margin-top:6px;font:700 10px/1 system-ui,sans-serif;letter-spacing:.16em;color:#94600E;background:#FBF0DB;padding:5px 8px;border-radius:999px}

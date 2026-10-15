@@ -116,7 +116,7 @@
     if (!ev.rsvpBy && tName !== 'emerald') $('rsvpLabel').textContent = 'KINDLY REPLY';
     if (tName === 'emerald') {
       frame.querySelector('[data-p="invite"]')?.remove();
-      $('rsvpLead').textContent = 'RSVP';
+      $('rsvpLead').textContent = rsvpContacts.length ? 'RSVP TO' : 'RSVP';
       $('rsvpByLead').hidden = !ev.rsvpBy;
       $('rsvpDeadline').hidden = !ev.rsvpBy;
     } else if (rsvpContacts.length) {

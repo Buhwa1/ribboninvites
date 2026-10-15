@@ -100,6 +100,7 @@ button{font:inherit;color:inherit}
 .timeline li+li::before{content:"";width:1.5cqw;height:1.5cqw;min-width:6px;min-height:6px;background:var(--accent);transform:rotate(45deg);margin:1.5cqh 0}
 .dress{margin-top:3.2cqh;font-style:italic;font-size:min(4.6cqw,2.4cqh);color:var(--ink-soft);line-height:1.45}
 .ask{font-family:var(--display);font-weight:500;font-size:var(--ask-size,min(10cqw,5.4cqh));line-height:1.1}
+.attendance-note{margin-top:1.3cqh !important;font-size:min(3.25cqw,1.72cqh);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);line-height:1.35}
 .rsvp{display:grid;gap:1.8cqh;margin-top:3.4cqh;width:min(62cqw,100%)}
 .rsvp .pill{justify-content:center;padding:1.6cqh 4cqw;font-size:min(4.8cqw,2.5cqh)}
 .rsvp .pill.yes{background:var(--yes-bg);color:var(--yes-ink);border:0}
@@ -192,9 +193,12 @@ textarea.field{resize:none;height:8cqh;line-height:1.35}
 .loader{position:absolute;inset:0;display:grid;place-items:center;background:#F7F1EB;z-index:50}
 .loader img{width:64px;height:64px;animation:breathe-l 1.6s ease-in-out infinite}
 @keyframes breathe-l{0%,100%{opacity:.55;transform:scale(.94)}50%{opacity:1;transform:scale(1)}}
-.credit{display:inline-block;margin-top:2.4cqh;font-family:system-ui,sans-serif;font-size:min(2.9cqw,1.5cqh);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);opacity:.9;text-decoration:underline;text-underline-offset:.3em;text-decoration-thickness:1px;transition:opacity .2s}
+.page[data-p="rsvp"]{bottom:5.7cqh;padding-bottom:4.4cqh}
+.credit{position:absolute;bottom:.4cqh;left:0;right:0;display:inline-block;font-family:system-ui,sans-serif;font-size:min(2.7cqw,1.4cqh);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);opacity:.72;text-decoration:none;transition:opacity .2s}
+.page[data-p="rsvp"] .credit{bottom:.45cqh;font-size:min(2.3cqw,1.22cqh);letter-spacing:.1em;opacity:.58}
 .credit:hover,.credit:focus-visible{opacity:1}
 .pass-card .sample{display:inline-block;margin-top:6px;font:700 10px/1 system-ui,sans-serif;letter-spacing:.16em;color:#94600E;background:#FBF0DB;padding:5px 8px;border-radius:999px}
+
 body.t-porcelain{
   --outer:#D8C4B8; --paper:#EFE3DB; --paper-2:#E8D9CF; --paper-hi:#F8F0EA;
   --ink:#5A4038; --ink-soft:#8A6F64; --line:rgba(150,110,95,.38); --accent:#9C7A5B;
@@ -552,8 +556,9 @@ body.t-royal .opening .plaque{opacity:0}
       <p class="rv label" style="--i:0" id="rsvpLabel"><span id="rsvpLead">KINDLY REPLY</span><span class="rsvp-contacts" id="rsvpContactList" hidden></span><span id="rsvpByLead"> BY </span><span class="rsvp-deadline" id="rsvpDeadline" data-f="rsvpBy"></span></p>
       <div class="rv rule" style="--i:1"><i></i></div>
       <p class="rv ask" style="--i:2" id="ask">Will you join us?</p>
+      <p class="rv attendance-note" style="--i:3">Attendance by invite only</p>
       
-      <form class="rv rsvp" style="--i:3" id="rsvpForm" novalidate>
+      <form class="rv rsvp" style="--i:4" id="rsvpForm" novalidate>
         <div class="who" id="whoFields" hidden>
           <input class="field" id="fName" autocomplete="name" placeholder="Your full name" aria-label="Your full name">
           <input class="field" id="fPhone" type="tel" autocomplete="tel" placeholder="Phone number (optional)" aria-label="Phone number">
@@ -575,9 +580,9 @@ body.t-royal .opening .plaque{opacity:0}
         <button type="button" class="pill send" id="passBtn" hidden>Show my entry pass</button>
         <button type="button" class="textlink" id="changeBtn">Change my reply</button>
       </div>
-      <p class="rv host" style="--i:4" id="hostLine" hidden>Questions? <a id="hostLink" target="_blank" rel="noopener">Message the hosts on WhatsApp</a></p>
-      <button class="rv textlink" style="--i:5" id="again" type="button">See the invitation again</button>
-      <a class="rv credit" style="--i:6" href="/" target="_blank" rel="noopener">Invitation by RibbonInvites</a>
+      <p class="rv host" style="--i:5" id="hostLine" hidden>Questions? <a id="hostLink" target="_blank" rel="noopener">Message the hosts on WhatsApp</a></p>
+      <button class="rv textlink" style="--i:6" id="again" type="button">See the invitation again</button>
+      <a class="rv credit" style="--i:7" href="/" target="_blank" rel="noopener">Invitation by RibbonInvites</a>
     </section>
 
     <section class="page" data-p="gallery" aria-label="Share photos">
@@ -946,7 +951,7 @@ THEMES.royal = (function(){
     if (!ev.rsvpBy && tName !== 'emerald') $('rsvpLabel').textContent = 'KINDLY REPLY';
     if (tName === 'emerald') {
       frame.querySelector('[data-p="invite"]')?.remove();
-      $('rsvpLead').textContent = 'RSVP';
+      $('rsvpLead').textContent = rsvpContacts.length ? 'RSVP TO' : 'RSVP';
       $('rsvpByLead').hidden = !ev.rsvpBy;
       $('rsvpDeadline').hidden = !ev.rsvpBy;
     } else if (rsvpContacts.length) {
@@ -1243,6 +1248,7 @@ THEMES.royal = (function(){
     });
   }
 })();
+
 </script>
 </body>
 </html>
