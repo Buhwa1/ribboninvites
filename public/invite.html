@@ -301,7 +301,7 @@ body.t-lubugo .opening .env-card{animation:rise-lubugo 1s cubic-bezier(.3,.7,.2,
 body.t-emerald{
   --outer:#06140F; --ink:#F3EBDD; --ink-soft:#CBC1AA; --accent:#D4AF6A; --line:rgba(212,175,106,.45);
   --hi:rgba(255,240,210,.12); --lo:rgba(0,0,0,.45);
-  --display:"Cinzel",Trajan,"Times New Roman",serif; --body:"Cormorant Garamond",Garamond,serif; --script:var(--body); --script-style:italic;
+  --display:"Cormorant Garamond",Garamond,serif; --body:"Cormorant Garamond",Garamond,serif; --script:"Cormorant Garamond",Garamond,serif; --script-style:italic;
   --name-size:min(13cqw,7cqh); --name-track:.06em; --couple-size:min(7.4cqw,3.9cqh); --and-size:min(8cqw,4.2cqh); --ask-size:min(7.6cqw,4.1cqh);
   --pill-bg:rgba(212,175,106,.1); --pill-ink:#F3EBDD; --pill-border:1px solid rgba(212,175,106,.6); --pill-shadow:none;
   --yes-bg:#D4AF6A; --yes-ink:#0F3B2E;
@@ -312,6 +312,12 @@ body.t-emerald{
 body.t-emerald .frame,body.t-emerald .gate{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .9 0 0 0 0 .95 0 0 0 0 .9 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url%28%23n%29'/%3E%3C/svg%3E"),var(--velvet)}
 body.t-emerald .label{color:var(--accent);opacity:.9}
 body.t-emerald .guest-greeting{overflow-wrap:anywhere}
+body.t-emerald .page[data-p="names"] .name{font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:400;font-size:min(5.4cqw,2.9cqh);line-height:1;letter-spacing:.02em}
+body.t-emerald .page[data-p="invite"] .couple>span{font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:400}
+body.t-emerald .page[data-p="names"] .and{margin:1.15cqh 0 1.7cqh;font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:500;font-size:min(2.8cqw,1.5cqh);letter-spacing:.1em}
+body.t-emerald .page[data-p="rsvp"] .ask{font-size:min(3.8cqw,2.05cqh)}
+body.t-emerald .page[data-p="rsvp"] .attendance-note{font-size:min(3cqw,1.6cqh);text-transform:none}
+body.t-emerald .page[data-p="rsvp"] #sendBtn{justify-self:center;padding:1.15cqh 3.2cqw !important;font-size:min(3.5cqw,1.85cqh);width:auto}
 body.t-emerald .rsvp-phone{color:#F3EBDD;text-decoration:underline;text-underline-offset:.18em;overflow-wrap:anywhere}
 body.t-emerald .rsvp-contacts{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:.4em .8em}
 body.t-emerald .rsvp-contact{color:#F3EBDD;text-decoration:underline;text-underline-offset:.18em;overflow-wrap:anywhere}
@@ -556,7 +562,7 @@ body.t-royal .opening .plaque{opacity:0}
       <p class="rv label" style="--i:0" id="rsvpLabel"><span id="rsvpLead">KINDLY REPLY</span><span class="rsvp-contacts" id="rsvpContactList" hidden></span><span id="rsvpByLead"> BY </span><span class="rsvp-deadline" id="rsvpDeadline" data-f="rsvpBy"></span></p>
       <div class="rv rule" style="--i:1"><i></i></div>
       <p class="rv ask" style="--i:2" id="ask">Will you join us?</p>
-      <p class="rv attendance-note" style="--i:3">Attendance by invite only</p>
+      <p class="rv attendance-note" style="--i:3">ATTENDANCE BY INVITE ONLY</p>
       
       <form class="rv rsvp" style="--i:4" id="rsvpForm" novalidate>
         <div class="who" id="whoFields" hidden>
@@ -702,7 +708,7 @@ body.t-royal .opening .plaque{opacity:0}
     <div class="plaque"><small>AN INVITATION FOR1</small><span data-f="guest"></span><em>Tap the seal to open</em></div>
   </div>
 </template>
-<script>window.THEMES = {}; const FONTS = {"porcelain": "Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script", "lubugo": "Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Italianno", "emerald": "Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500", "vellum": "Italiana&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400", "royal": "Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes"};</script>
+<script>window.THEMES = {}; const FONTS = {"porcelain": "Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script", "lubugo": "Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Italianno", "emerald": "Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500", "vellum": "Italiana&family=Jost:ital,wght@0,300;0,400;0,500;1,300;1,400", "royal": "Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes"};</script>
 <script>
 THEMES.porcelain = (function(){
   const r2 = n => +n.toFixed(2);

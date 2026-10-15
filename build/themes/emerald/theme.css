@@ -1,7 +1,7 @@
 :root{
   --outer:#06140F; --ink:#F3EBDD; --ink-soft:#CBC1AA; --accent:#D4AF6A; --line:rgba(212,175,106,.45);
   --hi:rgba(255,240,210,.12); --lo:rgba(0,0,0,.45);
-  --display:"Cinzel",Trajan,"Times New Roman",serif; --body:"Cormorant Garamond",Garamond,serif; --script:var(--body); --script-style:italic;
+  --display:"Cormorant Garamond",Garamond,serif; --body:"Cormorant Garamond",Garamond,serif; --script:"Cormorant Garamond",Garamond,serif; --script-style:italic;
   --name-size:min(13cqw,7cqh); --name-track:.06em; --couple-size:min(7.4cqw,3.9cqh); --and-size:min(8cqw,4.2cqh); --ask-size:min(7.6cqw,4.1cqh);
   --pill-bg:rgba(212,175,106,.1); --pill-ink:#F3EBDD; --pill-border:1px solid rgba(212,175,106,.6); --pill-shadow:none;
   --yes-bg:#D4AF6A; --yes-ink:#0F3B2E;
@@ -12,6 +12,12 @@
 .frame,.gate{background:url("__VELVET__"),var(--velvet)}
 .label{color:var(--accent);opacity:.9}
 .guest-greeting{overflow-wrap:anywhere}
+.page[data-p="names"] .name{font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:400;font-size:min(5.4cqw,2.9cqh);line-height:1;letter-spacing:.02em}
+.page[data-p="invite"] .couple>span{font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:400}
+.page[data-p="names"] .and{margin:1.15cqh 0 1.7cqh;font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:500;font-size:min(2.8cqw,1.5cqh);letter-spacing:.1em}
+.page[data-p="rsvp"] .ask{font-size:min(3.8cqw,2.05cqh)}
+.page[data-p="rsvp"] .attendance-note{font-size:min(3cqw,1.6cqh);text-transform:none}
+.page[data-p="rsvp"] #sendBtn{justify-self:center;padding:1.15cqh 3.2cqw !important;font-size:min(3.5cqw,1.85cqh);width:auto}
 .rsvp-phone{color:#F3EBDD;text-decoration:underline;text-underline-offset:.18em;overflow-wrap:anywhere}
 .rsvp-contacts{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:.4em .8em}
 .rsvp-contact{color:#F3EBDD;text-decoration:underline;text-underline-offset:.18em;overflow-wrap:anywhere}
