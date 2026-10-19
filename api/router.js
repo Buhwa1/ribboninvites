@@ -1,18 +1,44 @@
 // Single API entry point. vercel.json rewrites /api/<route> to /api/router?path=<route>
 import { send, fail, readJson, readRaw, HttpError } from '../lib/http.js';
+import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { getEvent, putEvent, listEventSlugs, listGuests, getGuest, putGuest, delGuest,
          listGallery, putGalleryItem, delGalleryItem, publicEvent, stats, rid, slugify } from '../lib/data.js';
 import { putFile, deleteFile } from '../lib/blob.js';
 import { PLANS, guestLimit, MAX_PHOTOS, MAX_GALLERY, MAX_UPLOAD } from '../lib/plans.js';
-import { storageMode } from '../lib/store.js';
+import { hitRateLimit, storageMode } from '../lib/store.js';
 
 const TEMPLATES = ['porcelain', 'lubugo', 'emerald', 'vellum', 'royal'];
 const TYPES = ['wedding', 'introduction', 'celebration'];
 const EDITABLE = ['template', 'type', 'a', 'b', 'famA', 'famB', 'date', 'endDate', 'venueA', 'mapA', 'venueB', 'mapB',
   'timeline', 'dress', 'verse', 'kicker', 'inviteLine', 'rsvpBy', 'hostPhone', 'replyPhone', 'rsvpPhones', 'rsvpContacts', 'rsvpMessage', 'messages', 'openRsvp'];
 
-const ownerKey = () => process.env.OWNER_KEY || (process.env.VERCEL ? null : 'owner-dev-key');
-const isOwner = k => !!k && k === ownerKey();
+const ownerSecret = () => process.env.OWNER_KEY || (process.env.VERCEL ? null : 'owner-dev-key');
+function ownerCredentials() {
+  const local = !process.env.VERCEL;
+  const username = process.env.OWNER_USERNAME || (local ? 'owner' : '');
+  const pin = process.env.OWNER_PIN || (local ? '1234' : '');
+  const secret = ownerSecret();
+  return username && /^\d{4}$/.test(pin) && secret ? { username, pin, secret } : null;
+}
+function safeEqual(a, b) {
+  const left = Buffer.from(String(a)); const right = Buffer.from(String(b));
+  return left.length === right.length && timingSafeEqual(left, right);
+}
+function signOwnerSession() {
+  const payload = Buffer.from(JSON.stringify({ u: ownerCredentials().username, n: randomBytes(18).toString('base64url') })).toString('base64url');
+  const signature = createHmac('sha256', ownerCredentials().secret).update(payload).digest('base64url');
+  return `${payload}.${signature}`;
+}
+const isOwner = token => {
+  const credentials = ownerCredentials();
+  if (!credentials || typeof token !== 'string') return false;
+  const [payload, signature, extra] = token.split('.');
+  if (!payload || !signature || extra) return false;
+  const expected = createHmac('sha256', credentials.secret).update(payload).digest('base64url');
+  if (!safeEqual(signature, expected)) return false;
+  try { return JSON.parse(Buffer.from(payload, 'base64url').toString()).u === credentials.username; }
+  catch { return false; }
+};
 
 function clean(input, ev = {}) {
   const out = {};
@@ -77,6 +103,19 @@ function parseGuestLine(line) {
 
 const routes = {
   async 'health'() { return { ok: true, storage: storageMode, time: Date.now() }; },
+
+  async 'owner/login:POST'(req) {
+    const credentials = ownerCredentials();
+    if (!credentials) fail(503, 'Owner sign-in is not configured. Set OWNER_USERNAME, OWNER_PIN, and OWNER_KEY.');
+    const address = String(req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
+    const bucket = createHash('sha256').update(address).digest('hex').slice(0, 24);
+    if (!await hitRateLimit(`owner-login:${bucket}`, 5, 900)) fail(429, 'Too many sign-in attempts. Try again in 15 minutes.');
+    const body = await readJson(req);
+    if (!safeEqual(String(body.username || '').trim(), credentials.username) || !safeEqual(String(body.code || '').trim(), credentials.pin)) {
+      fail(401, 'Username or code is incorrect.');
+    }
+    return { token: signOwnerSession() };
+  },
 
   // Create a new invitation (draft until the owner activates it)
   async 'events:POST'(req) {

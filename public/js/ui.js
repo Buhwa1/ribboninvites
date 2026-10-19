@@ -13,7 +13,7 @@ window.UI = (function () {
     try { r = await fetch('/api/' + path, opts); }
     catch { throw new Error('No connection. Please check your internet and try again.'); }
     let j = {}; try { j = await r.json(); } catch {}
-    if (!r.ok) throw new Error(j.error || `Something went wrong (${r.status}). Please try again.`);
+    if (!r.ok) { const e = new Error(j.error || `Something went wrong (${r.status}). Please try again.`); e.status = r.status; throw e; }
     return j;
   }
 

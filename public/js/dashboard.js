@@ -225,11 +225,39 @@
       } catch (x) { fail(x); }
     });
   };
-  $('#exportCsv').onclick = () => {
-    const rows = [['Name', 'Phone', 'Seats', 'Reply', 'Attending', 'Times opened', 'Note', 'Arrived', 'Personal link']].concat(S.guests.map(g => [g.name, g.phone ? '+' + g.phone : '', g.seats || 1, g.status || 'pending', g.status === 'yes' ? g.count || 1 : 0, g.opens || 0, g.note || '', g.checkedInAt ? new Date(g.checkedInAt).toLocaleString('en-GB') : '', glink(g)]));
-    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })); a.download = `${slug}-guest-list.csv`; a.click();
-    toast('Guest list downloaded');
+  $('#exportPdf').onclick = () => {
+    const report = window.open('', '_blank');
+    if (!report) return toast('Allow pop-ups to export your guest list as a PDF', { error: true });
+    const reply = g => g.status === 'yes' ? 'Attending' : g.status === 'no' ? 'Declined' : 'Awaiting reply';
+    const rows = S.guests.map(g => `<tr>
+      <td class="guest">${esc(g.name)}</td><td>${reply(g)}</td>
+      <td><a href="${esc(glink(g))}">Open invitation</a><span class="url">${esc(glink(g))}</span></td>
+      <td>${g.opens ? 'Yes' : 'No'}</td><td>${g.sentAt ? 'Yes' : 'No'}</td>
+    </tr>`).join('');
+    const date = fmtDate(S.ev.date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    report.document.open();
+    report.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(S.ev.a)} &amp; ${esc(S.ev.b)} · Guest list</title>
+      <style>
+        @page{size:A4 landscape;margin:15mm 14mm}
+        *{box-sizing:border-box}body{margin:0;color:#252321;font:12px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+        header{display:flex;align-items:center;gap:12px;padding:0 0 17px;border-bottom:1px solid #d8d2c8}
+        header img{width:38px;height:38px}header .brand{font-size:12px;font-weight:700;letter-spacing:.04em;color:#8f6630}
+        h1{margin:0 0 2px;font:500 23px/1.15 Georgia,serif}header p{margin:0;color:#6d6862;font-size:12px}
+        table{width:100%;border-collapse:collapse;margin-top:20px;table-layout:fixed}
+        col:nth-child(1){width:23%}col:nth-child(2){width:16%}col:nth-child(3){width:39%}col:nth-child(4),col:nth-child(5){width:11%}
+        th{text-align:left;padding:9px 10px;background:#f5f2ed;color:#665f57;font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+        td{padding:11px 10px;border-bottom:1px solid #e8e4de;vertical-align:top;overflow-wrap:anywhere}
+        tr{break-inside:avoid}.guest{font-weight:650;font-size:13px}a{color:#805d2e;text-decoration:underline;text-underline-offset:2px}
+        .url{display:block;margin-top:3px;color:#777;font-size:9px;overflow-wrap:anywhere;word-break:break-all}
+        .empty{text-align:center;color:#777;padding:28px}
+        @media screen{body{max-width:1120px;margin:32px auto;padding:0 24px} }
+      </style></head><body>
+      <header><img src="${origin}/img/logo-mark.svg" alt=""><div><div class="brand">${esc(B.name)}</div>
+      <h1>${esc(S.ev.a)} &amp; ${esc(S.ev.b)}</h1><p>Wedding guest list · ${esc(date)}</p></div></header>
+      <table><colgroup><col><col><col><col><col></colgroup><thead><tr><th>Guest</th><th>Reply</th><th>Personal invitation link</th><th>Opened</th><th>Sent</th></tr></thead>
+      <tbody>${rows || '<tr><td class="empty" colspan="5">No guests on the list.</td></tr>'}</tbody></table>
+      <script>window.addEventListener('load',()=>setTimeout(()=>window.print(),300));</script></body></html>`);
+    report.document.close();
   };
 
   // ---------- messages ----------

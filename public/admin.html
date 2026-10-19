@@ -47,8 +47,9 @@
 <main class="wrap" style="padding-bottom:80px">
   <div id="login" class="login" hidden>
     <div class="card stack">
-      <div><h1 class="h3" style="font-size:1.6rem">Owner sign-in</h1><p class="muted small" style="margin-top:6px">Enter the <code class="kbd">OWNER_KEY</code> you set in your Vercel environment variables.</p></div>
-      <form class="stack" id="lf"><input class="input" id="key" type="password" autocomplete="current-password" placeholder="Owner key" aria-label="Owner key">
+      <div><h1 class="h3" style="font-size:1.6rem">Owner sign-in</h1><p class="muted small" style="margin-top:6px">Sign in with your owner username and four-digit code.</p></div>
+      <form class="stack" id="lf"><input class="input" id="username" autocomplete="username" placeholder="Username" aria-label="Username" required>
+      <input class="input" id="code" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="current-password" placeholder="4-digit code" aria-label="4-digit code" required>
       <button class="btn primary" type="submit">Sign in</button><p class="hint" id="lerr" role="alert" style="color:var(--bad)"></p></form>
     </div>
   </div>
@@ -70,13 +71,17 @@
 (function () {
   const { $, $$, esc, icon, api, toast, fail, ugx, fmtDate, ago } = UI; const B = BRAND;
   UI.header(); UI.brand();
-  let key = ''; try { key = sessionStorage.getItem('ownerKey') || ''; } catch {}
+  let key = ''; try { key = localStorage.getItem('ownerSession') || ''; } catch {}
   let events = [], filter = 'all';
   const price = e => e.plan === 'custom' ? 0 : ((B.plans.find(p => p.id === e.plan) || {}).price || 0);
   async function load() {
     if (!key) { $('#login').hidden = false; $('#main').hidden = true; $('#out').hidden = true; return; }
-    try { const r = await api(`owner/events?k=${encodeURIComponent(key)}`); events = r.events; $('#login').hidden = true; $('#main').hidden = false; $('#out').hidden = false; draw(); }
-    catch (x) { $('#login').hidden = false; $('#main').hidden = true; $('#lerr').textContent = 'That key didn’t work. Check OWNER_KEY in Vercel.'; key = ''; }
+    try { const r = await api('owner/events', { key }); events = r.events; $('#login').hidden = true; $('#main').hidden = false; $('#out').hidden = false; draw(); }
+    catch (x) {
+      $('#login').hidden = false; $('#main').hidden = true; $('#out').hidden = true;
+      if (x.status === 401 || x.status === 403) { key = ''; try { localStorage.removeItem('ownerSession'); } catch {} }
+      $('#lerr').textContent = x.status === 401 || x.status === 403 ? 'Your saved sign-in is no longer valid. Please sign in again.' : x.message;
+    }
   }
   function draw() {
     const act = events.filter(e => e.active);
@@ -100,11 +105,18 @@
     let customGuests;
     if (plan === 'custom' && on) { customGuests = prompt('How many guests for this custom plan?', '800'); if (!customGuests) return; }
     if (!await UI.confirm(on ? `Activate ${ev.a} & ${ev.b}?` : `Deactivate ${ev.a} & ${ev.b}?`, on ? 'Only activate after you have confirmed their Mobile Money payment.' : 'They will go back to the 5-guest preview limit. Existing guests keep their links.', { ok: on ? 'Activate' : 'Deactivate', danger: !on })) return;
-    try { await api(`owner/activate?k=${encodeURIComponent(key)}`, { method: 'POST', body: { slug, plan, active: on, customGuests } }); toast(on ? 'Invitation activated' : 'Invitation deactivated'); load(); } catch (x) { fail(x); }
+    try { await api('owner/activate', { method: 'POST', key, body: { slug, plan, active: on, customGuests } }); toast(on ? 'Invitation activated' : 'Invitation deactivated'); load(); } catch (x) { fail(x); }
   });
   $$('#filters button').forEach(b => b.onclick = () => { filter = b.dataset.f; $$('#filters button').forEach(x => x.setAttribute('aria-pressed', x === b)); draw(); });
-  $('#lf').onsubmit = e => { e.preventDefault(); key = $('#key').value.trim(); try { sessionStorage.setItem('ownerKey', key); } catch {} load(); };
-  $('#out').onclick = () => { try { sessionStorage.removeItem('ownerKey'); } catch {} key = ''; $('#key').value = ''; $('#lerr').textContent = ''; load(); };
+  $('#lf').onsubmit = async e => {
+    e.preventDefault(); $('#lerr').textContent = '';
+    try {
+      const r = await api('owner/login', { method: 'POST', body: { username: $('#username').value.trim(), code: $('#code').value.trim() } });
+      key = r.token; try { localStorage.setItem('ownerSession', key); } catch {}
+      $('#code').value = ''; await load();
+    } catch (x) { $('#lerr').textContent = x.message; }
+  };
+  $('#out').onclick = () => { try { localStorage.removeItem('ownerSession'); } catch {} key = ''; $('#lf').reset(); $('#lerr').textContent = ''; load(); };
   $('#q').oninput = draw; $('#reload').onclick = () => load().then(() => toast('Refreshed'));
   load();
 })();

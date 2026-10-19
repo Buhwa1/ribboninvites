@@ -24,7 +24,7 @@ npm install
 npm run dev          # then open http://localhost:3000
 ```
 
-Locally, data is saved in `.data/` and the owner key for `/admin` is `owner-dev-key`.
+Locally, data is saved in `.data/`; use username `owner` and code `1234` to sign in at `/admin`.
 
 ## Go live on Vercel (about 10 minutes)
 
@@ -33,7 +33,7 @@ Locally, data is saved in `.data/` and the owner key for `/admin` is `owner-dev-
    (Or run `npx vercel --prod` inside this folder.)
 2. In the project, open **Storage** and create an **Upstash Redis** database. Connect it to the project.
 3. Still in **Storage**, create a **Blob** store and connect it. This stores songs and photos.
-4. In **Settings → Environment Variables**, add `OWNER_KEY` with a long secret only you know.
+4. In **Settings → Environment Variables**, set `OWNER_KEY` to a long random secret, `OWNER_USERNAME` to your owner username, and `OWNER_PIN` to your four-digit sign-in code.
 5. Redeploy. Open `https://<your-site>/api/health` and check it shows `"storage":"redis"`.
 6. In **Settings → Domains**, add `ribboninvites.com` and copy the DNS records Vercel shows into your registrar.
 
