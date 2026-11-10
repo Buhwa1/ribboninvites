@@ -135,6 +135,16 @@
 .qrbox svg{width:100%;height:100%;display:block}
 .fatal{padding:80px 20px;display:grid;justify-items:center;gap:12px;text-align:center}
 .fatal .i{width:40px;height:40px;color:var(--faint)}
+.page-manager{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}
+.page-toggle{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.page-toggle input{width:19px;height:19px;accent-color:var(--ribbon);flex:none}
+.page-toggle b{display:block;font-size:.92rem;font-weight:600}
+.page-toggle small{display:block;margin-top:2px;color:var(--muted);font-size:.8rem}
+.copy-group{padding:16px 0;border-top:1px solid var(--line)}
+.copy-group h3{font-size:1rem;margin:0 0 12px;font-weight:600}
+.copy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.copy-grid .wide{grid-column:1/-1}
+@media(max-width:640px){.page-manager,.copy-grid{grid-template-columns:1fr}.copy-grid .wide{grid-column:auto}}
 </style>
 <script src="/js/analytics.js"></script>
 </head>
@@ -162,6 +172,7 @@
 
   <nav class="tabs" aria-label="Dashboard sections"><div class="wrap" role="tablist">
     <button role="tab" data-tab="overview" aria-selected="true"><svg class="i"><use href="/img/icons.svg#home"/></svg>Overview</button>
+    <button role="tab" data-tab="pages" aria-selected="false"><svg class="i"><use href="/img/icons.svg#edit"/></svg>Pages &amp; wording</button>
     <button role="tab" data-tab="guests" aria-selected="false"><svg class="i"><use href="/img/icons.svg#users"/></svg>Guests <span class="count" id="gCount">0</span></button>
     <button role="tab" data-tab="send" aria-selected="false"><svg class="i"><use href="/img/icons.svg#send"/></svg>Send &amp; remind</button>
     <button role="tab" data-tab="media" aria-selected="false"><svg class="i"><use href="/img/icons.svg#music"/></svg>Music &amp; photos</button>
@@ -197,6 +208,23 @@
             <div class="field"><span class="lbl">Dashboard link <span class="opt">Private</span></span><div class="linkbox"><code id="dashLink"></code><button class="btn sm" data-copy="dashLink">Copy</button></div></div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- PAGES AND WORDING -->
+    <section class="panel" data-panel="pages" role="tabpanel" hidden>
+      <div class="card stack">
+        <div class="card-h"><div><h2>Pages for this invitation</h2><p>Choose what guests see. These settings affect only this couple’s invitation.</p></div></div>
+        <div class="page-manager" id="pageManager"></div>
+        <p class="hint">The programme needs schedule or dress-code details, couple photos appears after photos are uploaded, and the guest album opens around the event day. RSVP stays on so guests can reply.</p>
+        <div class="copy-group">
+          <h3>Page wording</h3><p class="muted small">Leave a field blank to use the suggested wording for this design and occasion. Use <code>{guest}</code> in the greeting to insert each guest’s name.</p>
+          <div id="pageCopyFields"></div>
+        </div>
+        <div class="row"><button class="btn sm" id="restorePageCopy" type="button"><svg class="i"><use href="/img/icons.svg#refresh"/></svg>Restore suggested wording</button>
+          <span class="spacer"></span><a class="btn sm" id="previewPages" target="_blank" rel="noopener"><svg class="i"><use href="/img/icons.svg#eye"/></svg>Preview invitation</a>
+          <button class="btn primary" id="savePages" type="button"><svg class="i"><use href="/img/icons.svg#check"/></svg>Save page changes</button></div>
+        <p class="hint" id="pageSaveStatus" role="status"></p>
       </div>
     </section>
 

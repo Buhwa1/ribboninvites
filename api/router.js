@@ -9,8 +9,18 @@ import { hitRateLimit, storageMode } from '../lib/store.js';
 
 const TEMPLATES = ['porcelain', 'lubugo', 'emerald', 'vellum', 'royal'];
 const TYPES = ['wedding', 'introduction', 'celebration'];
+const INVITE_PAGES = ['names', 'invite', 'date', 'venue', 'countdown', 'day', 'photos', 'rsvp', 'gallery'];
+const HIDDEN_BY_DEFAULT_PAGES = ['day', 'photos'];
+const PAGE_COPY_LIMITS = {
+  namesLede: 120, inviteGreeting: 40, familiesTitle: 80, dateHeading: 80, calendarLink: 60,
+  venueHeading: 80, venueAType: 40, venueBType: 40, countdownHeading: 80,
+  countdownDays: 20, countdownHours: 20, countdownMinutes: 20, countdownSeconds: 20,
+  programHeading: 60, rsvpHeading: 60, rsvpByLabel: 20, rsvpQuestion: 80, attendanceNote: 100,
+  acceptLabel: 35, declineLabel: 35, sendReplyLabel: 40,
+  photosHeading: 60, galleryHeading: 80, galleryQuestion: 60, galleryBody: 180, galleryButton: 40
+};
 const EDITABLE = ['template', 'type', 'a', 'b', 'famA', 'famB', 'date', 'endDate', 'venueA', 'mapA', 'venueB', 'mapB',
-  'timeline', 'dress', 'verse', 'kicker', 'inviteLine', 'rsvpBy', 'hostPhone', 'replyPhone', 'rsvpPhones', 'rsvpContacts', 'rsvpMessage', 'messages', 'openRsvp'];
+  'timeline', 'dress', 'verse', 'kicker', 'inviteLine', 'rsvpBy', 'hostPhone', 'replyPhone', 'rsvpPhones', 'rsvpContacts', 'rsvpMessage', 'messages', 'openRsvp', 'pageVisibility', 'pageCopy'];
 
 const ownerSecret = () => process.env.OWNER_KEY || (process.env.VERCEL ? null : 'owner-dev-key');
 function ownerCredentials() {
@@ -55,6 +65,27 @@ function clean(input, ev = {}) {
   }
   for (const f of ['mapA', 'mapB']) if (f in out) out[f] = str(out[f], 600);
   for (const f of ['verse', 'inviteLine']) if (f in out) out[f] = str(out[f], 400);
+  if ('pageVisibility' in out) {
+    const supplied = out.pageVisibility;
+    if (!supplied || typeof supplied !== 'object' || Array.isArray(supplied)) fail(400, 'Invalid page settings');
+    const current = ev.pageVisibility || {};
+    out.pageVisibility = Object.fromEntries(INVITE_PAGES.map(id => [id, id === 'rsvp' ? true :
+      typeof supplied[id] === 'boolean' ? supplied[id] :
+        typeof current[id] === 'boolean' ? current[id] : !HIDDEN_BY_DEFAULT_PAGES.includes(id)]));
+    if (!Object.values(out.pageVisibility).some(Boolean)) fail(400, 'At least one invitation page must remain visible');
+  }
+  if ('pageCopy' in out) {
+    const supplied = out.pageCopy;
+    if (!supplied || typeof supplied !== 'object' || Array.isArray(supplied)) fail(400, 'Invalid page wording');
+    const current = ev.pageCopy || {};
+    out.pageCopy = {};
+    for (const [field, max] of Object.entries(PAGE_COPY_LIMITS)) {
+      const value = Object.hasOwn(supplied, field) ? supplied[field] : current[field];
+      if (value === undefined) continue;
+      if (typeof value !== 'string') fail(400, 'Page wording must be text');
+      out.pageCopy[field] = value.trim().slice(0, max);
+    }
+  }
   if ('rsvpContacts' in out) {
     const contacts = Array.isArray(out.rsvpContacts) ? out.rsvpContacts : [];
     const allowUnnamed = (out.template || ev.template) === 'emerald';

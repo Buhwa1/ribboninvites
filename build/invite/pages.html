@@ -10,7 +10,7 @@
       <p class="rv and" style="--i:4">and</p>
       <h1 class="rv name" style="--i:5" data-f="b"></h1>
       <div class="rv rule" style="--i:6"><i></i></div>
-      <p class="rv lede names-lede" style="--i:7" data-f="lede"></p>
+      <p class="rv lede names-lede" style="--i:7" data-f="lede" data-c="namesLede"></p>
     </section>
 
     <section class="page" data-p="invite" aria-label="Invitation">
@@ -19,23 +19,23 @@
       <div class="rv rule" style="--i:2"><i></i></div>
       <p class="rv body" style="--i:3" data-f="inviteLine"></p>
       <div class="fam-wrap">
-        <p class="rv label" style="--i:4;margin-top:4cqh">WITH THE BLESSING OF</p>
+        <p class="rv label" style="--i:4;margin-top:4cqh" data-c="familiesTitle">WITH THE BLESSING OF</p>
         <div class="rv families" style="--i:5"><span data-f="famA"></span><b></b><span data-f="famB"></span></div>
       </div>
     </section>
 
     <section class="page" data-p="date" aria-label="Date">
-      <!-- <p class="rv label" style="--i:0">SAVE THE DATE</p> -->
+      <p class="rv label" style="--i:0" data-c="dateHeading">SAVE THE DATE</p>
       <div class="rv cart date-big" style="--i:1" data-cart="160x205"><div><div class="dd" data-f="day"></div><div class="mm" data-f="month"></div><div class="gem"></div><div class="yy" data-f="year"></div></div></div>
       <div class="rv pair" style="--i:2">
         <div class="cart" data-cart="120x62"><div data-f="weekday"></div></div>
         <!-- <div class="cart" data-cart="120x62"><div data-f="time"></div></div> -->
       </div>
-      <a class="rv textlink" style="--i:3" id="calLink" target="_blank" rel="noopener">Add to my calendar</a>
+      <a class="rv textlink" style="--i:3" id="calLink" data-c="calendarLink" target="_blank" rel="noopener">Add to my calendar</a>
     </section>
 
     <section class="page" data-p="venue" aria-label="Venue">
-      <p class="rv label" style="--i:0">WHERE TO FIND US</p>
+      <p class="rv label" style="--i:0" data-c="venueHeading">WHERE TO FIND US</p>
       <div class="rv map" style="--i:1" aria-hidden="true">
         <svg viewBox="0 0 250 300" preserveAspectRatio="xMidYMid slice">
           <rect class="m-bg" width="250" height="300"/>
@@ -55,40 +55,40 @@
       </div>
       <div class="rv venues" style="--i:2">
         <div class="venue"><div><small data-f="venueLabelA">CEREMONY</small><strong data-f="venueA"></strong></div><a class="pill" data-map="A" target="_blank" rel="noopener">__PIN__Directions</a></div>
-        <div class="venue vB"><div><small>RECEPTION</small><strong data-f="venueB"></strong></div><a class="pill" data-map="B" target="_blank" rel="noopener">__PIN__Directions</a></div>
+        <div class="venue vB"><div><small data-c="venueBType">RECEPTION</small><strong data-f="venueB"></strong></div><a class="pill" data-map="B" target="_blank" rel="noopener">__PIN__Directions</a></div>
       </div>
     </section>
 
     <section class="page" data-p="countdown" aria-label="Countdown">
-      <p class="rv label" style="--i:0">UNTIL WE CELEBRATE</p>
+      <p class="rv label" style="--i:0" data-c="countdownHeading">UNTIL WE CELEBRATE</p>
       <div class="rv rule" style="--i:1"><i></i></div>
       <div class="rv days" style="--i:2" id="cdD">0</div>
-      <p class="rv label" style="--i:2;margin-top:1cqh">DAYS</p>
+      <p class="rv label" style="--i:2;margin-top:1cqh" data-c="countdownDays">DAYS</p>
       <div class="rv clock" style="--i:3">
-        <div><b id="cdH">00</b><span>HOURS</span></div>
-        <div><b id="cdM">00</b><span>MINUTES</span></div>
-        <div><b id="cdS">00</b><span>SECONDS</span></div>
+        <div><b id="cdH">00</b><span data-c="countdownHours">HOURS</span></div>
+        <div><b id="cdM">00</b><span data-c="countdownMinutes">MINUTES</span></div>
+        <div><b id="cdS">00</b><span data-c="countdownSeconds">SECONDS</span></div>
       </div>
       <p class="rv verse" style="--i:4" data-f="verse"></p>
     </section>
 
-    <!-- <section class="page" data-p="day" aria-label="Order of the day">
-      <div class="rv cart title-cart" style="--i:0" data-cart="200x56"><div>The day</div></div>
+    <section class="page" data-p="day" aria-label="Order of the day">
+      <div class="rv cart title-cart" style="--i:0" data-cart="200x56"><div data-c="programHeading">The day</div></div>
       <ol class="timeline" id="timeline"></ol>
       <p class="rv dress" style="--i:6" data-f="dress"></p>
-    </section> -->
+    </section>
 
-    <!-- <section class="page" data-p="photos" aria-label="Photos">
-      <p class="rv label" style="--i:0">OUR MOMENTS</p>
+    <section class="page" data-p="photos" aria-label="Photos">
+      <p class="rv label" style="--i:0" data-c="photosHeading">OUR MOMENTS</p>
       <div class="rv slides" style="--i:1" id="slides"></div>
       <div class="rv sdots" style="--i:2" id="sdots"></div>
-    </section> -->
+    </section>
 
     <section class="page" data-p="rsvp" aria-label="Reply">
       <p class="rv label" style="--i:0" id="rsvpLabel"><span id="rsvpLead">KINDLY REPLY</span><span class="rsvp-contacts" id="rsvpContactList" hidden></span><span id="rsvpByLead"> BY </span><span class="rsvp-deadline" id="rsvpDeadline" data-f="rsvpBy"></span></p>
       <div class="rv rule" style="--i:1"><i></i></div>
-      <p class="rv ask" style="--i:2" id="ask">Will you join us?</p>
-      <p class="rv attendance-note" style="--i:3">ATTENDANCE BY INVITE ONLY</p>
+      <p class="rv ask" style="--i:2" id="ask" data-c="rsvpQuestion">Will you join us?</p>
+      <p class="rv attendance-note" style="--i:3" data-c="attendanceNote">ATTENDANCE BY INVITE ONLY</p>
       
       <form class="rv rsvp" style="--i:4" id="rsvpForm" novalidate>
         <div class="who" id="whoFields" hidden>
@@ -96,12 +96,12 @@
           <input class="field" id="fPhone" type="tel" autocomplete="tel" placeholder="Phone number (optional)" aria-label="Phone number">
         </div>
         <div class="choice" role="group" aria-label="Your reply">
-          <button type="button" class="pill" data-s="yes" aria-pressed="false">Accept</button>
-          <button type="button" class="pill" data-s="no" aria-pressed="false">Apologies</button>
+          <button type="button" class="pill" data-s="yes" aria-pressed="false" data-c="acceptLabel">Accept</button>
+          <button type="button" class="pill" data-s="no" aria-pressed="false" data-c="declineLabel">Apologies</button>
         </div>
         <div class="counter" id="counter" hidden><span>Attending</span><span class="ctl"><button type="button" id="cMinus" aria-label="Fewer">−</button><b id="cVal">1</b><button type="button" id="cPlus" aria-label="More">+</button></span></div>
         <textarea class="field" id="fNote" maxlength="500" placeholder="A note for the couple (optional)" aria-label="A note for the couple"></textarea>
-        <button type="submit" class="pill send" id="sendBtn">Send my reply</button>
+        <button type="submit" class="pill send" id="sendBtn" data-c="sendReplyLabel">Send my reply</button>
         <p class="err" id="rsvpErr" role="alert"></p>
       </form>
 
@@ -118,11 +118,11 @@
     </section>
 
     <section class="page" data-p="gallery" aria-label="Share photos">
-      <p class="rv label" style="--i:0">THANK YOU FOR CELEBRATING WITH US</p>
+      <p class="rv label" style="--i:0" data-c="galleryHeading">THANK YOU FOR CELEBRATING WITH US</p>
       <div class="rv rule" style="--i:1"><i></i></div>
-      <p class="rv ask" style="--i:2">Share your photos</p>
-      <p class="rv lede" style="--i:3;margin-top:1.4cqh">Add the moments you captured so we can relive the day through your eyes.</p>
-      <label class="rv pill send upl" style="--i:4;margin-top:2.4cqh">Add photos<input type="file" id="galInput" accept="image/*" multiple></label>
+      <p class="rv ask" style="--i:2" data-c="galleryQuestion">Share your photos</p>
+      <p class="rv lede" style="--i:3;margin-top:1.4cqh" data-c="galleryBody">Add the moments you captured so we can relive the day through your eyes.</p>
+      <label class="rv pill send upl" style="--i:4;margin-top:2.4cqh"><span data-c="galleryButton">Add photos</span><input type="file" id="galInput" accept="image/*" multiple></label>
       <div class="rv gal" style="--i:5" id="gal"></div>
     </section>
 

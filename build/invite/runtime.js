@@ -113,7 +113,7 @@
       if (d.length >= 10) return `+${d.slice(0, d.length - 9)} ${d.slice(-9, -6)} ${d.slice(-6, -3)} ${d.slice(-3)}`;
       return d ? `+${d}` : '';
     };
-    if (!ev.rsvpBy && tName !== 'emerald') $('rsvpLabel').textContent = 'KINDLY REPLY';
+    if (!ev.rsvpBy && tName !== 'emerald') { $('rsvpByLead').hidden = true; $('rsvpDeadline').hidden = true; }
     if (tName === 'emerald') {
       frame.querySelector('[data-p="invite"]')?.remove();
       $('rsvpLead').textContent = rsvpContacts.length ? 'RSVP TO' : 'RSVP';
@@ -121,6 +121,18 @@
       $('rsvpDeadline').hidden = !ev.rsvpBy;
     } else if (rsvpContacts.length) {
       $('rsvpLead').textContent = 'KINDLY RSVP TO';
+    }
+    const pageCopyTargets = {
+      inviteGreeting: ['.page[data-p="names"] .guest-greeting', '.page[data-p="invite"] .lede'],
+      rsvpHeading: ['#rsvpLead'], rsvpByLabel: ['#rsvpByLead'], venueAType: ['[data-f="venueLabelA"]']
+    };
+    for (const [field, value] of Object.entries(ev.pageCopy || {})) {
+      if (typeof value !== 'string' || !value.trim()) continue;
+      const targets = pageCopyTargets[field] || [...frame.querySelectorAll(`[data-c="${field}"]`)];
+      for (const target of targets) {
+        const el = typeof target === 'string' ? frame.querySelector(target) : target;
+        if (el) el.textContent = field === 'inviteGreeting' ? value.replaceAll('{guest}', guestName) : value;
+      }
     }
     {
       const list = $('rsvpContactList');
@@ -184,6 +196,9 @@
     if (!photos.length && !isDraft) drop('photos');
     if (!(afterStart && (guest || ev.demo)) || isDraft || isPreview) drop('gallery');
     if (now > end.getTime()) drop('countdown');
+    const pageVisibility = ev.pageVisibility || {};
+    for (const page of ['day', 'photos']) if (pageVisibility[page] !== true) drop(page);
+    for (const [page, visible] of Object.entries(pageVisibility)) if (visible === false) drop(page);
 
     // programme
     const tl = $('timeline');
@@ -314,7 +329,7 @@
       } catch (x) {
         if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.close();
         err.textContent = /fetch|network/i.test(x.message) ? 'No connection. Please check your internet and try again.' : x.message;
-      } finally { btn.disabled = false; btn.textContent = 'Send my reply'; }
+      } finally { btn.disabled = false; btn.textContent = ev.pageCopy?.sendReplyLabel || 'Send my reply'; }
     });
 
     function openPass(){

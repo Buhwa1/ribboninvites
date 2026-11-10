@@ -52,8 +52,57 @@
     $('#prevLink').textContent = `${origin}/i/${slug}?preview=1`;
     $('#genLink').textContent = `${origin}/i/${slug}`; $('#genWrap').hidden = !ev.openRsvp;
     $('#dashLink').textContent = location.href.split('#')[0];
+    drawPageEditor();
     drawBanner();
   }
+
+  const PAGE_OPTIONS = [
+    ['names', 'Names', 'Couple names and opening line'], ['invite', 'Invitation', 'Main invitation wording'],
+    ['date', 'Date', 'Date details and calendar link'], ['venue', 'Venue', 'Locations and directions'],
+    ['countdown', 'Countdown', 'Countdown to the event'], ['day', 'Programme', 'Schedule and dress code'],
+    ['photos', 'Couple photos', 'Photo slideshow page'], ['rsvp', 'Reply', 'Required to collect guest replies'],
+    ['gallery', 'Guest album', 'Photo sharing after the event']
+  ];
+  const COPY_GROUPS = [
+    ['Names', [['kicker', 'Opening line', 60], ['namesLede', 'Line beneath the names', 120]]],
+    ['Invitation', [['inviteGreeting', 'Guest greeting', 60], ['inviteLine', 'Invitation wording', 400, 'area'], ['familiesTitle', 'Family heading', 80]]],
+    ['Date and venue', [['dateHeading', 'Date page heading', 80], ['calendarLink', 'Calendar link label', 60], ['venueHeading', 'Venue page heading', 80], ['venueAType', 'Main venue label', 40], ['venueBType', 'Reception label', 40]]],
+    ['Countdown', [['countdownHeading', 'Heading', 80], ['verse', 'Closing line', 160], ['countdownDays', 'Days label', 20], ['countdownHours', 'Hours label', 20], ['countdownMinutes', 'Minutes label', 20], ['countdownSeconds', 'Seconds label', 20]]],
+    ['Programme', [['programHeading', 'Programme heading', 60]]],
+    ['Reply', [['rsvpHeading', 'RSVP heading', 60], ['rsvpByLabel', 'Reply-by prefix', 20], ['rsvpQuestion', 'Question', 80], ['attendanceNote', 'Attendance note', 100], ['acceptLabel', 'Accept button', 35], ['declineLabel', 'Decline button', 35], ['sendReplyLabel', 'Submit button', 40]]],
+    ['Photos and guest album', [['photosHeading', 'Couple photos heading', 60], ['galleryHeading', 'Guest album heading', 80], ['galleryQuestion', 'Guest album title', 60], ['galleryBody', 'Guest album description', 180, 'area'], ['galleryButton', 'Upload button', 40]]]
+  ];
+  function drawPageEditor() {
+    if (!S.ev) return;
+    const visibility = S.ev.pageVisibility || {};
+    $('#pageManager').innerHTML = PAGE_OPTIONS.map(([id, title, hint]) => `<label class="page-toggle"><input type="checkbox" data-page-visible="${id}" ${id === 'rsvp' || (typeof visibility[id] === 'boolean' ? visibility[id] : !['day', 'photos'].includes(id)) ? 'checked' : ''} ${id === 'rsvp' ? 'disabled' : ''}>
+      <span><b>${title}</b><small>${hint}</small></span></label>`).join('');
+    $('#pageCopyFields').innerHTML = COPY_GROUPS.map(([group, fields]) => `<div class="copy-group"><h3>${group}</h3><div class="copy-grid">${fields.map(([id, label, max, type]) => {
+      const value = id === 'kicker' || id === 'inviteLine' || id === 'verse' ? S.ev[id] || '' : (S.ev.pageCopy || {})[id] || '';
+      const placeholder = id === 'inviteGreeting' ? 'Dear {guest},' : id === 'kicker' ? 'Suggested for this occasion' : 'Use suggested wording';
+      return `<div class="field${type === 'area' ? ' wide' : ''}"><label class="lbl" for="copy-${id}">${label}</label>${type === 'area'
+        ? `<textarea class="textarea" id="copy-${id}" data-page-copy="${id}" maxlength="${max}" placeholder="${placeholder}">${esc(value)}</textarea>`
+        : `<input class="input" id="copy-${id}" data-page-copy="${id}" maxlength="${max}" value="${esc(value)}" placeholder="${placeholder}">`}</div>`;
+    }).join('')}</div></div>`).join('');
+    $('#previewPages').href = `/i/${slug}?preview=1`;
+  }
+  $('#savePages').onclick = async e => {
+    const pageVisibility = Object.fromEntries(PAGE_OPTIONS.map(([id]) => [id, $(`[data-page-visible="${id}"]`).checked]));
+    if (!Object.values(pageVisibility).some(Boolean)) return toast('Keep at least one invitation page visible', { error: true });
+    const pageCopy = Object.fromEntries($$('#pageCopyFields [data-page-copy]').map(input => [input.dataset.pageCopy, input.value.trim()]));
+    await UI.busy(e.currentTarget, async () => {
+      try {
+        const r = await api(`event?${k()}`, { method: 'PUT', key, body: { event: {
+          pageVisibility, pageCopy, kicker: pageCopy.kicker, inviteLine: pageCopy.inviteLine, verse: pageCopy.verse
+        } } });
+        S.ev = r.event; drawPageEditor(); $('#pageSaveStatus').textContent = 'Page settings saved for this invitation.'; toast('Page settings saved');
+      } catch (x) { fail(x); }
+    });
+  };
+  $('#restorePageCopy').onclick = () => {
+    $$('#pageCopyFields [data-page-copy]').forEach(input => { input.value = ''; });
+    $('#pageSaveStatus').textContent = 'Suggested wording selected. Save page changes to apply it.';
+  };
 
   function drawBanner() {
     const ev = S.ev, el = $('#banner');
