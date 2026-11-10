@@ -48,6 +48,7 @@ button{font:inherit;color:inherit}
 .rule::before,.rule::after{content:"";width:13cqw;height:1px;background:var(--accent);opacity:.7}
 .rule i{width:1.6cqw;height:1.6cqw;min-width:6px;min-height:6px;background:var(--accent);transform:rotate(45deg)}
 .name{margin:0;font-family:var(--display);font-weight:var(--name-weight,500);font-size:var(--name-size,min(19cqw,9.6cqh));line-height:.95;letter-spacing:var(--name-track,.01em);color:var(--ink)}
+.names-kicker{max-width:100%;margin-bottom:2.5cqh;font-family:var(--display);font-weight:600;font-size:min(3.05cqw,1.65cqh);line-height:1.15;letter-spacing:.01em;color:var(--ink);white-space:nowrap}
 .and{font-family:var(--script);font-style:var(--script-style,normal);font-size:var(--and-size,min(10cqw,5.2cqh));line-height:1;color:var(--accent);margin:.6cqh 0 1.2cqh}
 .lede{font-style:italic;font-size:min(5.2cqw,2.7cqh);line-height:1.45;color:var(--ink-soft)}
 .couple{font-family:var(--display);font-weight:var(--name-weight,500);font-size:var(--couple-size,min(10cqw,5.2cqh));line-height:1.1;letter-spacing:var(--name-track,0)}
@@ -313,6 +314,7 @@ body.t-emerald .frame,body.t-emerald .gate{background:url("data:image/svg+xml,%3
 body.t-emerald .label{color:var(--accent);opacity:.9}
 body.t-emerald .guest-greeting{overflow-wrap:anywhere}
 body.t-emerald .page[data-p="names"] .name{font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:400;font-size:min(5.4cqw,2.9cqh);line-height:1;letter-spacing:.02em}
+body.t-emerald .page[data-p="names"] .names-kicker{font-style:italic}
 body.t-emerald .page[data-p="invite"] .couple>span{font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:400}
 body.t-emerald .page[data-p="names"] .and{margin:1.15cqh 0 1.7cqh;font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:500;font-size:min(2.8cqw,1.5cqh);letter-spacing:.1em}
 body.t-emerald .page[data-p="rsvp"] .ask{font-size:min(3.8cqw,2.05cqh)}
@@ -478,8 +480,8 @@ body.t-royal .opening .plaque{opacity:0}
 
     <section class="page" data-p="names" aria-label="The couple">
       <p class="rv lede guest-greeting" style="--i:0">Dear <span data-f="guest"></span>,</p>
-      <p class="rv label" style="--i:1" data-f="kicker"></p>
-      <div class="rv rule" style="--i:2"><i></i></div>
+      <div class="rv rule" style="--i:1"><i></i></div>
+      <p class="rv names-kicker" style="--i:2" data-f="kicker"></p>
       <h1 class="rv name" style="--i:3" data-f="a"></h1>
       <p class="rv and" style="--i:4">and</p>
       <h1 class="rv name" style="--i:5" data-f="b"></h1>
@@ -852,7 +854,7 @@ THEMES.royal = (function(){
   const isPreview = qs.has('preview') && !guestId;
 
   const TYPE_TEXT = {
-    wedding: { kicker: 'TOGETHER WITH THEIR FAMILIES', lede: 'are getting married',
+    wedding: { kicker: 'TOGETHER WITH THEIR FAMILIES,', lede: 'are getting married',
       invite: 'would be honoured to have you beside them as they say “I do” and begin their life together.', venueA: 'CEREMONY' },
     introduction: { kicker: 'WITH JOY, THE FAMILIES OF', lede: 'invite you to their introduction ceremony',
       invite: 'request the honour of your presence as our families meet, celebrate and bless this union.', venueA: 'CEREMONY' },
@@ -968,7 +970,7 @@ THEMES.royal = (function(){
       rsvpHeading: ['#rsvpLead'], rsvpByLabel: ['#rsvpByLead'], venueAType: ['[data-f="venueLabelA"]']
     };
     for (const [field, value] of Object.entries(ev.pageCopy || {})) {
-      if (typeof value !== 'string' || !value.trim()) continue;
+      if (typeof value !== 'string' || (!value.trim() && field !== 'dateHeading')) continue;
       const targets = pageCopyTargets[field] || [...frame.querySelectorAll(`[data-c="${field}"]`)];
       for (const target of targets) {
         const el = typeof target === 'string' ? frame.querySelector(target) : target;

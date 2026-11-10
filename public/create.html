@@ -138,9 +138,10 @@
 
     <section class="sec"><div class="card stack">
       <div class="sec-h" style="margin-bottom:6px"><span class="n">5</span><div><h2>Wording and replies</h2><p>Leave wording empty to use our suggestion, shown in grey.</p></div></div>
-      <div class="field"><label class="lbl" for="kicker">Opening line</label><input class="input" id="kicker" maxlength="60"><p class="hint">Shown above your names. Write it in any language.</p></div>
+      <div class="field"><label class="lbl" for="kicker">Line above the couple names</label><input class="input" id="kicker" maxlength="60"><p class="hint">Shown above your names in the same style. Write it in any language.</p></div>
       <div class="field"><label class="lbl" for="inviteLine">Invitation wording</label><textarea class="textarea" id="inviteLine" maxlength="400" style="min-height:90px"></textarea></div>
       <div class="field"><label class="lbl" for="verse">Closing line <span class="opt">Optional</span></label><input class="input" id="verse" maxlength="160" placeholder="Two hearts, one story, and a seat kept just for you."></div>
+      <div class="field"><label class="lbl" for="dateHeading">Date page heading</label><input class="input" id="dateHeading" maxlength="80" value="SAVE THE DATE"><p class="hint">Edit this wording or clear the field to show no heading.</p></div>
       <div class="grid2">
         <div class="field"><label class="lbl" for="rsvpBy">Reply by <span class="opt">Optional</span></label><input class="input" id="rsvpBy" type="date"></div>
         <div class="field"><label class="lbl" for="hostPhone">WhatsApp for guest questions <span class="opt">Optional</span></label><input class="input" id="hostPhone" type="tel" inputmode="tel" placeholder="e.g. 0772 123 456"></div>
@@ -191,7 +192,7 @@
   const qs = new URLSearchParams(location.search);
   const editSlug = qs.get('slug'), editKey = qs.get('k');
   const SUG = {
-    wedding: { kicker: 'TOGETHER WITH THEIR FAMILIES', invite: 'would be honoured to have you beside them as they say “I do” and begin their life together.' },
+    wedding: { kicker: 'TOGETHER WITH THEIR FAMILIES,', invite: 'would be honoured to have you beside them as they say “I do” and begin their life together.' },
     introduction: { kicker: 'WITH JOY, THE FAMILIES OF', invite: 'request the honour of your presence as our families meet, celebrate and bless this union.' },
     celebration: { kicker: 'YOU ARE INVITED TO CELEBRATE WITH', invite: 'would love you to join them for a day of joy, good food and dancing.' }
   };
@@ -230,7 +231,8 @@
   const F = ['a', 'b', 'famA', 'famB', 'venueA', 'mapA', 'venueB', 'mapB', 'dress', 'kicker', 'inviteLine', 'verse', 'rsvpBy', 'hostPhone', 'replyPhone', 'rsvpMessage'];
   function build() {
     const v = id => $('#' + id).value.trim();
-    const ev = { template: state.template, type: state.type, timeline: state.timeline.filter(r => r[0].trim() || r[1].trim()), openRsvp: $('#openRsvp').checked };
+    const ev = { template: state.template, type: state.type, timeline: state.timeline.filter(r => r[0].trim() || r[1].trim()), openRsvp: $('#openRsvp').checked,
+      pageCopy: { dateHeading: v('dateHeading') } };
     F.forEach(f => ev[f] = v(f));
     ev.hostPhone = UI.phoneDigits(ev.hostPhone);
     ev.replyPhone = UI.phoneDigits(ev.replyPhone);
@@ -285,6 +287,7 @@
         const { event: ev } = await api(`event?slug=${encodeURIComponent(editSlug)}&preview=1`, { key: editKey });
         Object.assign(state, { template: tplOk(ev.template) ? ev.template : 'porcelain', type: ev.type || 'wedding', timeline: (ev.timeline || []).map(r => [r[0], r[1]]) });
         F.forEach(f => { if (ev[f] != null) $('#' + f).value = ev[f]; });
+        $('#dateHeading').value = Object.hasOwn(ev.pageCopy || {}, 'dateHeading') ? ev.pageCopy.dateHeading : 'SAVE THE DATE';
         const contacts = ev.rsvpContacts?.length ? ev.rsvpContacts
           : (ev.rsvpPhones || []).map((phone, i) => ({ name: state.template === 'emerald' ? '' : `Host ${i + 1}`, phone }));
         $('#rsvpContacts').value = contacts.map(c => c.name ? `${c.name} | +${c.phone}` : `+${c.phone}`).join('\n');

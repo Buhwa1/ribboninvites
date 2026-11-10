@@ -64,7 +64,7 @@
     ['gallery', 'Guest album', 'Photo sharing after the event']
   ];
   const COPY_GROUPS = [
-    ['Names', [['kicker', 'Opening line', 60], ['namesLede', 'Line beneath the names', 120]]],
+    ['Names', [['kicker', 'Line above the couple names', 60], ['namesLede', 'Line beneath the names', 120]]],
     ['Invitation', [['inviteGreeting', 'Guest greeting', 60], ['inviteLine', 'Invitation wording', 400, 'area'], ['familiesTitle', 'Family heading', 80]]],
     ['Date and venue', [['dateHeading', 'Date page heading', 80], ['calendarLink', 'Calendar link label', 60], ['venueHeading', 'Venue page heading', 80], ['venueAType', 'Main venue label', 40], ['venueBType', 'Reception label', 40]]],
     ['Countdown', [['countdownHeading', 'Heading', 80], ['verse', 'Closing line', 160], ['countdownDays', 'Days label', 20], ['countdownHours', 'Hours label', 20], ['countdownMinutes', 'Minutes label', 20], ['countdownSeconds', 'Seconds label', 20]]],
@@ -78,7 +78,8 @@
     $('#pageManager').innerHTML = PAGE_OPTIONS.map(([id, title, hint]) => `<label class="page-toggle"><input type="checkbox" data-page-visible="${id}" ${id === 'rsvp' || (typeof visibility[id] === 'boolean' ? visibility[id] : !['day', 'photos'].includes(id)) ? 'checked' : ''} ${id === 'rsvp' ? 'disabled' : ''}>
       <span><b>${title}</b><small>${hint}</small></span></label>`).join('');
     $('#pageCopyFields').innerHTML = COPY_GROUPS.map(([group, fields]) => `<div class="copy-group"><h3>${group}</h3><div class="copy-grid">${fields.map(([id, label, max, type]) => {
-      const value = id === 'kicker' || id === 'inviteLine' || id === 'verse' ? S.ev[id] || '' : (S.ev.pageCopy || {})[id] || '';
+      const value = id === 'kicker' || id === 'inviteLine' || id === 'verse' ? S.ev[id] || ''
+        : Object.hasOwn(S.ev.pageCopy || {}, id) ? S.ev.pageCopy[id] : id === 'dateHeading' ? 'SAVE THE DATE' : '';
       const placeholder = id === 'inviteGreeting' ? 'Dear {guest},' : id === 'kicker' ? 'Suggested for this occasion' : 'Use suggested wording';
       return `<div class="field${type === 'area' ? ' wide' : ''}"><label class="lbl" for="copy-${id}">${label}</label>${type === 'area'
         ? `<textarea class="textarea" id="copy-${id}" data-page-copy="${id}" maxlength="${max}" placeholder="${placeholder}">${esc(value)}</textarea>`
@@ -100,7 +101,7 @@
     });
   };
   $('#restorePageCopy').onclick = () => {
-    $$('#pageCopyFields [data-page-copy]').forEach(input => { input.value = ''; });
+    $$('#pageCopyFields [data-page-copy]').forEach(input => { input.value = input.dataset.pageCopy === 'dateHeading' ? 'SAVE THE DATE' : ''; });
     $('#pageSaveStatus').textContent = 'Suggested wording selected. Save page changes to apply it.';
   };
 

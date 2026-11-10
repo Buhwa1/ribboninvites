@@ -11,7 +11,7 @@
   const isPreview = qs.has('preview') && !guestId;
 
   const TYPE_TEXT = {
-    wedding: { kicker: 'TOGETHER WITH THEIR FAMILIES', lede: 'are getting married',
+    wedding: { kicker: 'TOGETHER WITH THEIR FAMILIES,', lede: 'are getting married',
       invite: 'would be honoured to have you beside them as they say “I do” and begin their life together.', venueA: 'CEREMONY' },
     introduction: { kicker: 'WITH JOY, THE FAMILIES OF', lede: 'invite you to their introduction ceremony',
       invite: 'request the honour of your presence as our families meet, celebrate and bless this union.', venueA: 'CEREMONY' },
@@ -127,7 +127,7 @@
       rsvpHeading: ['#rsvpLead'], rsvpByLabel: ['#rsvpByLead'], venueAType: ['[data-f="venueLabelA"]']
     };
     for (const [field, value] of Object.entries(ev.pageCopy || {})) {
-      if (typeof value !== 'string' || !value.trim()) continue;
+      if (typeof value !== 'string' || (!value.trim() && field !== 'dateHeading')) continue;
       const targets = pageCopyTargets[field] || [...frame.querySelectorAll(`[data-c="${field}"]`)];
       for (const target of targets) {
         const el = typeof target === 'string' ? frame.querySelector(target) : target;

@@ -13,6 +13,7 @@
 .label{color:var(--accent);opacity:.9}
 .guest-greeting{overflow-wrap:anywhere}
 .page[data-p="names"] .name{font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:400;font-size:min(5.4cqw,2.9cqh);line-height:1;letter-spacing:.02em}
+.page[data-p="names"] .names-kicker{font-style:italic}
 .page[data-p="invite"] .couple>span{font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:400}
 .page[data-p="names"] .and{margin:1.15cqh 0 1.7cqh;font-family:"Cormorant Garamond",Garamond,serif;font-style:italic;font-weight:500;font-size:min(2.8cqw,1.5cqh);letter-spacing:.1em}
 .page[data-p="rsvp"] .ask{font-size:min(3.8cqw,2.05cqh)}

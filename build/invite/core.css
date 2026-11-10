@@ -27,6 +27,7 @@ button{font:inherit;color:inherit}
 .rule::before,.rule::after{content:"";width:13cqw;height:1px;background:var(--accent);opacity:.7}
 .rule i{width:1.6cqw;height:1.6cqw;min-width:6px;min-height:6px;background:var(--accent);transform:rotate(45deg)}
 .name{margin:0;font-family:var(--display);font-weight:var(--name-weight,500);font-size:var(--name-size,min(19cqw,9.6cqh));line-height:.95;letter-spacing:var(--name-track,.01em);color:var(--ink)}
+.names-kicker{max-width:100%;margin-bottom:2.5cqh;font-family:var(--display);font-weight:600;font-size:min(3.05cqw,1.65cqh);line-height:1.15;letter-spacing:.01em;color:var(--ink);white-space:nowrap}
 .and{font-family:var(--script);font-style:var(--script-style,normal);font-size:var(--and-size,min(10cqw,5.2cqh));line-height:1;color:var(--accent);margin:.6cqh 0 1.2cqh}
 .lede{font-style:italic;font-size:min(5.2cqw,2.7cqh);line-height:1.45;color:var(--ink-soft)}
 .couple{font-family:var(--display);font-weight:var(--name-weight,500);font-size:var(--couple-size,min(10cqw,5.2cqh));line-height:1.1;letter-spacing:var(--name-track,0)}
